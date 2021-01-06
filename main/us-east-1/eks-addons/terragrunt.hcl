@@ -4,6 +4,11 @@ include {
 
 terraform {
   source = "github.com/particuleio/terraform-kubernetes-addons.git//modules/aws?ref=v1.1.0"
+
+  after_hook "helm_update" {
+    commands = ["apply"]
+    execute  = ["bash", "-c", "helm repo update"]
+  }
 }
 
 dependency "eks" {
@@ -220,7 +225,7 @@ inputs = {
   }
 
   sealed-secrets = {
-    enabled = true
+    enabled = false
   }
 
 }

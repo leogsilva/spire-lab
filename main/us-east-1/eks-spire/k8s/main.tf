@@ -110,3 +110,55 @@ resource "kubectl_manifest" "server_service" {
     kubernetes_namespace.spire
   ]
 }
+
+# Spire agent 
+data "kubectl_file_documents" "spire_agent_account" {
+  content = file("${path.module}/k8s/yaml/agent-account.yaml")
+}
+
+data "kubectl_file_documents" "spire_agent_cluster_role" {
+  content = file("${path.module}/k8s/yaml/agent-cluster-role.yaml")
+}
+
+resource "kubectl_manifest" "spire_agent_account" {
+  count     = length(data.kubectl_file_documents.spire_agent_account.documents)
+  yaml_body = element(data.kubectl_file_documents.spire_agent_account.documents, count.index)
+  depends_on = [
+    kubernetes_namespace.spire
+  ]
+}
+
+resource "kubectl_manifest" "spire_agent_cluster_role" {
+  count     = length(data.kubectl_file_documents.spire_agent_cluster_role.documents)
+  yaml_body = element(data.kubectl_file_documents.spire_agent_cluster_role.documents, count.index)
+  depends_on = [
+    kubernetes_namespace.spire
+  ]
+}
+
+# Apply the agent-configmap.yaml configuration file to create the 
+# agent configmap and deploy the Agent as a daemonset that runs one 
+# instance of each Agent on each Kubernetes worker node.
+data "kubectl_file_documents" "spire_agent_configmap" {
+  content = file("${path.module}/k8s/yaml/agent-configmap.yaml")
+}
+
+data "kubectl_file_documents" "spire_agent_daemonset" {
+  content = file("${path.module}/k8s/yaml/agent-daemonset.yaml")
+}
+
+resource "kubectl_manifest" "spire_agent_configmap" {
+  count     = length(data.kubectl_file_documents.spire_agent_configmap.documents)
+  yaml_body = element(data.kubectl_file_documents.spire_agent_configmap.documents, count.index)
+  depends_on = [
+    kubernetes_namespace.spire
+  ]
+}
+
+resource "kubectl_manifest" "spire_agent_daemonset" {
+  count     = length(data.kubectl_file_documents.spire_agent_daemonset.documents)
+  yaml_body = element(data.kubectl_file_documents.spire_agent_daemonset.documents, count.index)
+  depends_on = [
+    kubernetes_namespace.spire
+  ]
+}

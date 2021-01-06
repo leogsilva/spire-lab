@@ -15,6 +15,10 @@ data:
       #AWS requires the use of RSA.  EC cryptography is not supported
       ca_key_type = "rsa-2048"
 
+      # Creates the iss claim in JWT-SVIDs.
+      # TODO: Replace MY_DISCOVERY_DOMAIN with the FQDN of the Discovery Provider that you will configure in DNS
+      jwt_issuer = "https://oidc-discovery.k8sguru.info"
+      
       default_svid_ttl = "1h"
       ca_subject = {
         country = ["US"],
