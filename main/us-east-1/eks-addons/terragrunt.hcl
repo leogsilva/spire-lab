@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "github.com/particuleio/terraform-kubernetes-addons.git//modules/aws?ref=v1.1.0"
+  source = "github.com/particuleio/terraform-kubernetes-addons.git//modules/aws?ref=v1.5.0"
 
   after_hook "helm_update" {
     commands = ["apply"]
@@ -55,7 +55,6 @@ generate "provider" {
         host                   = data.aws_eks_cluster.cluster.endpoint
         cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
         token                  = data.aws_eks_cluster_auth.cluster.token
-        load_config_file       = false
       }
     }
     data "aws_eks_cluster" "cluster" {
@@ -120,11 +119,11 @@ inputs = {
   }
 
   cluster-autoscaler = {
-    enabled = true
+    enabled = false
   }
 
   cni-metrics-helper = {
-    enabled = true
+    enabled = false
   }
 
   external-dns = {
@@ -138,7 +137,7 @@ inputs = {
   }
 
   istio-operator = {
-    enabled = true
+    enabled = false
   }
 
   karma = {
@@ -221,7 +220,7 @@ inputs = {
   }
 
   npd = {
-    enabled = true
+    enabled = false
   }
 
   sealed-secrets = {
