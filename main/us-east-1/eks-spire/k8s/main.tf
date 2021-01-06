@@ -75,8 +75,123 @@ resource "kubectl_manifest" "server_cluster_role" {
 # directories, notably /run/spire/data and /run/spire/config. 
 # These volumes are bound in when the server container is deployed.
 
-data "kubectl_file_documents" "spire_server_configmap" {
-  content = file("${path.module}/k8s/yaml/server-configmap.yaml")
+resource "kubectl_manifest" "server_ingress" {
+  yaml_body = <<YAML
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: spire-ingress
+  namespace: ${local.namespace}
+spec:
+  tls:
+    - hosts:
+        # TODO: Replace MY_DISCOVERY_DOMAIN with the FQDN of the Discovery Provider that you will configure in DNS
+        - ${var.discovery_domain}
+      secretName: oidc-secret
+  rules:
+    # TODO: Replace MY_DISCOVERY_DOMAIN with the FQDN of the Discovery Provider that you will configure in DNS
+    - host: ${var.discovery_domain}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: spire-oidc
+              servicePort: 443
+YAML
+}
+
+resource "kubectl_manifest" "oidc_configmap" {
+  yaml_body = <<YAML
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oidc-discovery-provider
+  namespace: ${local.namespace}
+data:
+  oidc-discovery-provider.conf: |
+    log_level = "INFO"
+    # TODO: Replace MY_DISCOVERY_DOMAIN with the FQDN of the Discovery Provider that you will configure in DNS
+    domain = "${var.discovery_domain}"
+    acme {
+        directory_url = "https://acme-v02.api.letsencrypt.org/directory"
+        cache_dir = "/run/spire"
+        tos_accepted = true
+        # TODO: Change MY_EMAIL_ADDRESS with your email
+        email = "${var.email_address}"
+    }
+    registration_api {
+        socket_path = "/run/spire/sockets/registration.sock"
+    }
+YAML
+}
+
+data "kubectl_manifest" "spire_server_configmap" {
+  yaml_body = <<YAML
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spire-server
+  namespace: ${local.namespace}
+data:
+  server.conf: |
+    server {
+      bind_address = "0.0.0.0"
+      bind_port = "8081"
+      registration_uds_path = "/tmp/spire-registration.sock"
+      trust_domain = "example.org"
+      data_dir = "/run/spire/data"
+      log_level = "DEBUG"
+      #AWS requires the use of RSA.  EC cryptography is not supported
+      ca_key_type = "rsa-2048"
+
+      # Creates the iss claim in JWT-SVIDs.
+      # TODO: Replace MY_DISCOVERY_DOMAIN with the FQDN of the Discovery Provider that you will configure in DNS
+      jwt_issuer = "${var.discovery_domain}"
+      
+      default_svid_ttl = "1h"
+      ca_subject = {
+        country = ["US"],
+        organization = ["SPIFFE"],
+        common_name = "",
+      }
+    }
+
+    plugins {
+      DataStore "sql" {
+        plugin_data {
+          database_type = "sqlite3"
+          connection_string = "/run/spire/data/datastore.sqlite3"
+        }
+      }
+
+      NodeAttestor "k8s_sat" {
+        plugin_data {
+          clusters = {
+            # NOTE: Change this to your cluster name
+            "demo-cluster" = {
+              use_token_review_api_validation = true
+              service_account_whitelist = ["spire:spire-agent"]
+            }
+          }
+        }
+      }
+
+      NodeResolver "noop" {
+        plugin_data {}
+      }
+
+      KeyManager "disk" {
+        plugin_data {
+          keys_path = "/run/spire/data/keys.json"
+        }
+      }
+
+      Notifier "k8sbundle" {
+        plugin_data {
+        }
+      }
+    }
+YAML
 }
 
 data "kubectl_file_documents" "spire_server_statefulset" {
@@ -87,12 +202,8 @@ data "kubectl_file_documents" "server_service" {
   content = file("${path.module}/k8s/yaml/server-service.yaml")
 }
 
-resource "kubectl_manifest" "spire_server_configmap" {
-  count     = length(data.kubectl_file_documents.spire_server_configmap.documents)
-  yaml_body = element(data.kubectl_file_documents.spire_server_configmap.documents, count.index)
-  depends_on = [
-    kubernetes_namespace.spire
-  ]
+data "kubectl_file_documents" "server_oidc_service" {
+  content = file("${path.module}/k8s/yaml/server-oidc-service.yaml")
 }
 
 resource "kubectl_manifest" "spire_server_statefulset" {
@@ -110,6 +221,16 @@ resource "kubectl_manifest" "server_service" {
     kubernetes_namespace.spire
   ]
 }
+
+resource "kubectl_manifest" "server_oidc_service" {
+  count     = length(data.kubectl_file_documents.server_oidc_service.documents)
+  yaml_body = element(data.kubectl_file_documents.server_oidc_service.documents, count.index)
+  depends_on = [
+    kubernetes_namespace.spire
+  ]
+}
+
+
 
 # Spire agent 
 data "kubectl_file_documents" "spire_agent_account" {

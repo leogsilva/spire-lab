@@ -133,13 +133,17 @@ inputs = {
   }
 
   external-dns = {
-    external-dns = {
-      enabled = false
+    external-dns = {  
+      enabled = true
+      extra_values = <<-EXTRA_VALUES
+        aws:
+          zoneType: public
+      EXTRA_VALUES
     },
   }
 
   ingress-nginx = {
-    enabled = false
+    enabled = true
   }
 
   istio-operator = {
