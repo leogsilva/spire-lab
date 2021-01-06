@@ -5,7 +5,13 @@ include {
 terraform {
   source = "github.com/particuleio/terraform-kubernetes-addons.git//modules/aws?ref=v1.5.0"
 
-  after_hook "helm_update" {
+
+  before_hook "helm_repo" {
+    commands = ["apply"]
+    execute = ["bash","-c", "helm repo add stable https://charts.helm.sh/stable --force-update"]
+  }
+
+  before_hook "helm_update" {
     commands = ["apply"]
     execute  = ["bash", "-c", "helm repo update"]
   }
