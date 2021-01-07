@@ -5,6 +5,11 @@ include {
 terraform {
   source = "github.com/terraform-aws-modules/terraform-aws-eks?ref=v13.2.0"
   
+  before_hook "helm_repo" {
+    commands = ["apply"]
+    execute = ["bash","-c", "helm repo add stable https://charts.helm.sh/stable --force-update"]
+  }
+    
   after_hook "helm_update" {
     commands = ["apply"]
     execute  = ["bash", "-c", "helm repo update"]
