@@ -75,28 +75,26 @@ resource "kubectl_manifest" "server_cluster_role" {
 # directories, notably /run/spire/data and /run/spire/config. 
 # These volumes are bound in when the server container is deployed.
 
-resource "kubectl_manifest" "server_ingress" {
+
+resource "kubectl_manifest" "server_oidc_service" {
   yaml_body = <<YAML
-apiVersion: extensions/v1beta1
-kind: Ingress
+# Service definition for the admission webhook
+apiVersion: v1
+kind: Service
 metadata:
-  name: spire-ingress
+  name: spire-oidc
   namespace: ${local.namespace}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: ${var.discovery_domain}  
 spec:
-  tls:
-    - hosts:
-        # TODO: Replace MY_DISCOVERY_DOMAIN with the FQDN of the Discovery Provider that you will configure in DNS
-        - ${var.discovery_domain}
-      secretName: oidc-secret
-  rules:
-    # TODO: Replace MY_DISCOVERY_DOMAIN with the FQDN of the Discovery Provider that you will configure in DNS
-    - host: ${var.discovery_domain}
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: spire-oidc
-              servicePort: 443
+  type: LoadBalancer
+  selector:
+    app: spire-server
+  ports:
+    - name: https
+      port: 443
+      targetPort: spire-oidc-port
+
 YAML
 }
 
@@ -125,7 +123,7 @@ data:
 YAML
 }
 
-data "kubectl_manifest" "spire_server_configmap" {
+resource "kubectl_manifest" "spire_server_configmap" {
   yaml_body = <<YAML
 apiVersion: v1
 kind: ConfigMap
@@ -137,7 +135,7 @@ data:
     server {
       bind_address = "0.0.0.0"
       bind_port = "8081"
-      registration_uds_path = "/tmp/spire-registration.sock"
+      registration_uds_path = "/run/spire/sockets/registration.sock"
       trust_domain = "example.org"
       data_dir = "/run/spire/data"
       log_level = "DEBUG"
@@ -202,10 +200,6 @@ data "kubectl_file_documents" "server_service" {
   content = file("${path.module}/k8s/yaml/server-service.yaml")
 }
 
-data "kubectl_file_documents" "server_oidc_service" {
-  content = file("${path.module}/k8s/yaml/server-oidc-service.yaml")
-}
-
 resource "kubectl_manifest" "spire_server_statefulset" {
   count     = length(data.kubectl_file_documents.spire_server_statefulset.documents)
   yaml_body = element(data.kubectl_file_documents.spire_server_statefulset.documents, count.index)
@@ -221,15 +215,6 @@ resource "kubectl_manifest" "server_service" {
     kubernetes_namespace.spire
   ]
 }
-
-resource "kubectl_manifest" "server_oidc_service" {
-  count     = length(data.kubectl_file_documents.server_oidc_service.documents)
-  yaml_body = element(data.kubectl_file_documents.server_oidc_service.documents, count.index)
-  depends_on = [
-    kubernetes_namespace.spire
-  ]
-}
-
 
 
 # Spire agent 

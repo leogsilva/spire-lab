@@ -71,6 +71,6 @@ locals {
 
 inputs = {
     cluster-name = dependency.eks.outputs.cluster_id
-    discovery_domain = ""
-    email_address = ""
+    discovery_domain = "oidc-discovery.k8sguru.info"
+    email_address = "leogsilva@gmail.com"
 }

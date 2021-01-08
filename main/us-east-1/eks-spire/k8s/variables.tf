@@ -16,11 +16,17 @@ variable "trust_domain" {
 variable "discovery_domain" {
   description = "url for oidc endpoint"
   type = string
-  mandatory = true
+  validation {
+    condition     = length(var.discovery_domain) > 0
+    error_message = "A valid discovery_domain value should be provided."
+  }
 }
 
 variable "email_address" {
   description = "valid email address for certificate generation"
   type = string
-  mandatory = true
+  validation {
+    condition     = length(var.email_address) > 0
+    error_message = "A valid email_address value should be is provided."
+  }
 }
