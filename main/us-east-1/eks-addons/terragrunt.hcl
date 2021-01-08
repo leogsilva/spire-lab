@@ -106,11 +106,11 @@ inputs = {
   }
 
   aws-load-balancer-controller = {
-    enabled = true
+    enabled = false
   }
 
   aws-node-termination-handler = {
-    enabled = true
+    enabled = false
   }
 
   calico = {
@@ -143,7 +143,7 @@ inputs = {
   }
 
   ingress-nginx = {
-    enabled = true
+    enabled = false
   }
 
   istio-operator = {

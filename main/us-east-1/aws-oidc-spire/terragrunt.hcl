@@ -3,17 +3,11 @@ include {
 }
 
 terraform {
-  source = "./k8s"
-
+  source = "./aws-oidc"
 }
 
-dependency "eks" {
-  config_path = "../eks"
-
-  mock_outputs = {
-    cluster_id              = "cluster-name"
-    cluster_oidc_issuer_url = "https://oidc.eks.eu-west-3.amazonaws.com/id/0000000000000000"
-  }
+dependency "eks-spire" {
+  config_path = "../eks-spire"
 }
 
 generate "provider" {
@@ -43,12 +37,6 @@ generate "provider" {
         load_config_file       = false
       }
     }
-    data "aws_eks_cluster" "cluster" {
-      name = var.cluster-name
-    }
-    data "aws_eks_cluster_auth" "cluster" {
-      name = var.cluster-name
-    }
   EOF
 }
 
@@ -71,7 +59,7 @@ locals {
 }
 
 inputs = {
-    cluster-name = dependency.eks.outputs.cluster_id
-    discovery_domain = "oidc-discovery.k8sguru.info"
-    email_address = "leogsilva@gmail.com"
+    discovery_domain = dependency.eks-spire.outputs.discovery_domain
+    audience = "mys3"
+    bucket_name = "terraform-projects-devops"
 }
