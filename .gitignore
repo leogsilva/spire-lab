@@ -1,3 +1,4 @@
+docker/broker/secrets/*.*
 **/.DS_Store
 .terragrunt-cache
 kubeconfig
