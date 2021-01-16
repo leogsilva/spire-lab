@@ -14,6 +14,7 @@ public class SpireConsumer {
     
     private Collection<? extends Certificate> generateCertificates(byte[] input) throws IOException, CertificateException {
         return CertificateFactory.getInstance(X509).generateCertificates(new ByteArrayInputStream(input));
+    }
 
-    } 
+
 }

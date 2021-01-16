@@ -20,8 +20,9 @@ k8s_yaml([
 
 custom_build(
   'java-kafka-ssl-factory',
-  'scripts/build_docker.sh',
-  ['.'],skips_local_docker=True,disable_push=True
+  'scripts/build_docker.sh $EXPECTED_REF',
+  ['./java-kafka-ssl-factory'],
+  skips_local_docker=True,disable_push=True
 )
 
 # docker_build('k3d-myregistry.localhost:5000/java-kafka-ssl-factory','java-kafka-ssl-factory')

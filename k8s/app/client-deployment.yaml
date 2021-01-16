@@ -18,7 +18,8 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: client
-          image: k3d-myregistry.localhost:5000/java-kafka-ssl-factory:local
+          imagePullPolicy: Always
+          image: java-kafka-ssl-factory:local
           command: ["sleep"]
           args: ["1000000000"]
           volumeMounts:
