@@ -1,6 +1,7 @@
 print('Hello Tiltfile')
 
 allow_k8s_contexts('k3d-k3s-default')
+default_registry('k3d-myregistry.localhost:5000')
 
 k8s_yaml(['spire-server/spire-namespace.yaml',
     'spire-server/server-account.yaml',
@@ -15,8 +16,16 @@ k8s_yaml([
     'spire-agent/agent-cluster-role.yaml',
     'spire-agent/agent-configmap.yaml',
     'spire-agent/agent-daemonset.yaml'
-])    
+])
+
+custom_build(
+  'java-kafka-ssl-factory',
+  'scripts/build_docker.sh',
+  ['.'],skips_local_docker=True,disable_push=True
+)
+
+# docker_build('k3d-myregistry.localhost:5000/java-kafka-ssl-factory','java-kafka-ssl-factory')
+k8s_yaml(['app/client-deployment.yaml'])
 
 local_resource('attestation', cmd='spire-agent/attestation.sh')
 
-docker_build('java-kafka-ssl-factory', 'java-kafka-ssl-factory')
