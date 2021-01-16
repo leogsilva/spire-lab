@@ -10,4 +10,13 @@ k8s_yaml(['spire-server/spire-namespace.yaml',
     'spire-server/server-statefulset.yaml',
     'spire-server/spire-bundle-configmap.yaml'])
 
-docker_build('docker.io/java-kafka-ssl-factory', 'java-kafka-ssl-factory')
+k8s_yaml([
+    'spire-agent/agent-account.yaml',
+    'spire-agent/agent-cluster-role.yaml',
+    'spire-agent/agent-configmap.yaml',
+    'spire-agent/agent-daemonset.yaml'
+])    
+
+local_resource('attestation', cmd='spire-agent/attestation.sh')
+
+docker_build('java-kafka-ssl-factory', 'java-kafka-ssl-factory')
