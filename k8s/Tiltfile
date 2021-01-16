@@ -1,0 +1,13 @@
+print('Hello Tiltfile')
+
+allow_k8s_contexts('k3d-k3s-default')
+
+k8s_yaml(['spire-server/spire-namespace.yaml',
+    'spire-server/server-account.yaml',
+    'spire-server/server-cluster-role.yaml',
+    'spire-server/server-configmap.yaml',
+    'spire-server/server-service.yaml',
+    'spire-server/server-statefulset.yaml',
+    'spire-server/spire-bundle-configmap.yaml'])
+
+docker_build('docker.io/java-kafka-ssl-factory', 'java-kafka-ssl-factory')
