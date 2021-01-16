@@ -33,6 +33,6 @@ public class SpireConsumerTest {
         } catch (BundleNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println("Authorities:  " + bundle.getX509Authorities());
+        System.out.println("Authorities:" + bundle.getX509Authorities());
     }
 }
