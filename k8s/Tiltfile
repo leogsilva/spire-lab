@@ -24,8 +24,15 @@ custom_build(
   ['./java-kafka-ssl-factory'],
   skips_local_docker=True,disable_push=True
 )
-
 k8s_yaml(['app/client-deployment.yaml'])
+
+# Kafka installation
+custom_build(
+  'custom-cp-enterprise-kafka',
+  'custom-cp-enterprise-kafka/build_docker.sh $EXPECTED_REF',
+  ['./custom-cp-enterprise-kafka'],
+  skips_local_docker=True,disable_push=True
+)
 
 k8s_yaml(local('helm template kafka cp-helm-charts -f cp-helm-charts-k3d/values.yaml'))
 watch_file('cp-helm-charts-k3d')

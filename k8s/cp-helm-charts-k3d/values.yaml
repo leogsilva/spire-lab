@@ -44,7 +44,7 @@ cp-zookeeper:
 cp-kafka:
   enabled: true
   brokers: 1
-  image: confluentinc/cp-enterprise-kafka
+  image: custom-cp-enterprise-kafka
   imageTag: 6.0.1
   ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
   ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
