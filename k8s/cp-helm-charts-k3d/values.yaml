@@ -67,7 +67,11 @@ cp-kafka:
   #   memory: 128Mi
   securityContext: 
     runAsUser: 0
-  customEnv: {}
+  customEnv: 
+    KAFKA_SSL_PROVIDER: "Spiffe"
+    KAFKA_ADVERTISED_LISTENERS: "SSL://:9093"
+    KAFKA_PRINCIPAL_BUILDER_CLASS: "io.okro.kafka.SpiffePrincipalBuilder"
+    KAFKA_SSL_CLIENT_AUTH: "required"
 
 ## ------------------------------------------------------
 ## Schema Registry
