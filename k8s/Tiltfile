@@ -25,9 +25,11 @@ custom_build(
   skips_local_docker=True,disable_push=True
 )
 
-# docker_build('k3d-myregistry.localhost:5000/java-kafka-ssl-factory','java-kafka-ssl-factory')
 k8s_yaml(['app/client-deployment.yaml'])
 
+k8s_yaml(local('helm template kafka cp-helm-charts -f cp-helm-charts-k3d/values.yaml'))
+watch_file('cp-helm-charts-k3d')
+
 local_resource('attestation', cmd='spire-agent/attestation.sh')
-local_resource('integration tests', cmd='scripts/run_test.sh')
+local_resource('integration tests', cmd='scripts/2_run_test.sh')
 
