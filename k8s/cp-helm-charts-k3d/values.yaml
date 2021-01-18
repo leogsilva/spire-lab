@@ -67,12 +67,24 @@ cp-kafka:
   #   memory: 128Mi
   securityContext: 
     runAsUser: 0
+  configurationOverrides:
+    "advertised.listeners": "SSL://:9093"
+    "listener.security.protocol.map": |-
+     PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,SSL:SSL
   customEnv: 
     KAFKA_SSL_PROVIDER: "Spiffe"
-    KAFKA_ADVERTISED_LISTENERS: "SSL://:9093"
     KAFKA_PRINCIPAL_BUILDER_CLASS: "io.okro.kafka.SpiffePrincipalBuilder"
     KAFKA_SSL_CLIENT_AUTH: "required"
-
+    SPIFFE_ENDPOINT_SOCKET: "/tmp/agent.sock"
+    KAFKA_SSL_KEYSTORE_FILENAME: kafka.broker.keystore.jks
+    KAFKA_SSL_KEYSTORE_CREDENTIALS: broker_keystore_creds
+    KAFKA_SSL_KEY_CREDENTIALS: broker_sslkey_creds
+    KAFKA_SSL_TRUSTSTORE_FILENAME: kafka.broker.truststore.jks
+    KAFKA_SSL_TRUSTSTORE_CREDENTIALS: broker_truststore_creds
+    KAFKA_SSL_ENABLED_PROTOCOLS: "TLSv1.2"
+    KAFKA_SSL_PROTOCOL: "Spiffe"
+    KAFKA_SSL_KEYSTORE_TYPE: "Spiffe"
+    KAFKA_SSL_ENGINE_FACTORY_CLASS: "org.apache.kafka.common.auth.spire.SpireSslEngineFactory"
 ## ------------------------------------------------------
 ## Schema Registry
 ## ------------------------------------------------------

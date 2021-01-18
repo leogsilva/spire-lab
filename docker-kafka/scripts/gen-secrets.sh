@@ -7,7 +7,6 @@ set -o nounset \
     -o verbose \
     -o xtrace
 
-pushd docker/broker/secrets
 PASSWORD="tutorial"
 
 # Generate CA key
@@ -49,5 +48,3 @@ ssl.key.password=tutorial
 security.protocol=SSL
 EOF
 done
-
-popd
