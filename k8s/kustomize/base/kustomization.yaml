@@ -1,0 +1,8 @@
+resources:
+- all.yaml
+
+patches:
+- path: patch.yaml
+  target:
+    kind: StatefulSet
+    name: kafka-cp-kafka

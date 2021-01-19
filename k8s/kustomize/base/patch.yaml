@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka-cp-kafka
+spec:
+  template:
+    spec:
+      containers:
+      - name: cp-kafka-broker
+        image: "custom-cp-enterprise-kafka:6.0.1"
+        volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: true
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory

@@ -85,6 +85,8 @@ cp-kafka:
     KAFKA_SSL_PROTOCOL: "Spiffe"
     KAFKA_SSL_KEYSTORE_TYPE: "Spiffe"
     KAFKA_SSL_ENGINE_FACTORY_CLASS: "org.apache.kafka.common.auth.spire.SpireSslEngineFactory"
+    KAFKA_SPIRE_AGENT_SOCK: "unix:/run/spire/sockets/agent.sock"
+    KAFKA_SPIRE_SPIFFE_IDS: "spiffe://example.org/ns/default/sa/default"
 ## ------------------------------------------------------
 ## Schema Registry
 ## ------------------------------------------------------

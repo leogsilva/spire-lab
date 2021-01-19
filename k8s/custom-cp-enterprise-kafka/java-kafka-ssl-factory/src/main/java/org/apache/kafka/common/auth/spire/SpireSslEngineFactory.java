@@ -112,8 +112,18 @@ public class SpireSslEngineFactory implements SslEngineFactory {
         this.configs = Collections.unmodifiableMap(configs);
 
         String rawSpiffeIds = (String) this.configs.get(SPIFFE_IDS);
+        if (rawSpiffeIds == null) {
+            throw new RuntimeException("Property " + SPIFFE_IDS + " not set");
+        }
+        log.info("Property " + SPIFFE_IDS + ": " + rawSpiffeIds);
+
         List<String> spiffeIds = Arrays.asList(rawSpiffeIds.split(","));
         String agentSock = (String)this.configs.get(AGENT_SOCK);
+        if (agentSock == null) {
+            throw new RuntimeException("Property " + AGENT_SOCK + " not set");
+        }
+        log.info("Property " + AGENT_SOCK + ":" + agentSock);
+
         SecurityUtils.addConfiguredSecurityProviders(this.configs);
         DefaultX509Source.X509SourceOptions x509SourceOptions = DefaultX509Source.X509SourceOptions
                 .builder()

@@ -18,13 +18,13 @@ k8s_yaml([
     'spire-agent/agent-daemonset.yaml'
 ])
 
-custom_build(
-  'java-kafka-ssl-factory',
-  'scripts/build_docker.sh $EXPECTED_REF',
-  ['./java-kafka-ssl-factory'],
-  skips_local_docker=True,disable_push=True
-)
-k8s_yaml(['app/client-deployment.yaml'])
+# custom_build(
+#   'java-kafka-ssl-factory',
+#   'scripts/build_docker.sh $EXPECTED_REF',
+#   ['./java-kafka-ssl-factory'],
+#   skips_local_docker=True,disable_push=True
+# )
+# k8s_yaml(['app/client-deployment.yaml'])
 
 # Kafka installation
 custom_build(
@@ -34,7 +34,8 @@ custom_build(
   skips_local_docker=True,disable_push=True
 )
 
-k8s_yaml(local('helm template kafka cp-helm-charts -f cp-helm-charts-k3d/values.yaml'))
+templated_yaml = local('./scripts/kustomize_kafka.sh')
+k8s_yaml(templated_yaml)
 watch_file('cp-helm-charts-k3d')
 
 local_resource('attestation', cmd='spire-agent/attestation.sh')
