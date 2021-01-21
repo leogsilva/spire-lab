@@ -2,7 +2,11 @@ resources:
 - all.yaml
 
 patches:
-- path: patch.yaml
+- path: patch_statefulset.yaml
   target:
     kind: StatefulSet
     name: kafka-cp-kafka
+- path: patch_service.yaml
+  target:
+    kind: Service
+    name: kafka-cp-kafka    

@@ -13,5 +13,5 @@ function kustomizeIt {
     kustomize build --enable_alpha_plugins ${KUSTOMIZE_HOME}/$1
 }
 
-helmTemplate && kustomizeIt base
+helmTemplate && kustomizeIt base 
 # kustomizeIt base

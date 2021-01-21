@@ -422,7 +422,6 @@ spec:
         image: "confluentinc/cp-zookeeper:6.0.1"
         imagePullPolicy: "IfNotPresent"
         securityContext:
-          dataLogDirSize: 10Gi
           runAsUser: 0
         ports:
         - containerPort: 2181
