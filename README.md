@@ -1,93 +1,157 @@
 # spire-lab
-Simple k8s lab for spiffe/spire aws integration architecture
 
-# Pre-req to launch spire-lab
-## Install aws cli
-https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
-config aws_security file: 
-```sh 
-$ vi ~/.aws/credentials
+Simple k8s lab for spiffe/spire aws integration architecture.
+
+This lab aim to provide a security layer supported by spiffe/spire for microservices.
+
+---
+## Pre-req to launch spire-lab
+
+### Install aws cli
+
+link: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
+
+config aws_security file:
+
+``` 
+vi ~/.aws/credentials
 ```
 
-## Install terraform 
-https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/azure-get-started
+something like this:
 
-## Install terragrunt 
-https://terragrunt.gruntwork.io/docs/getting-started/install/
+```{r, attr.source='.numberLines'}
+[aws-security] 
+aws_access_key_id = <AWS_ACCESS_KEY_ID>
+aws_secret_access_key = <AWS_SECRET_ACCESS_KEY>
+
+```
+
+### Install terraform 
+
+link: https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/azure-get-started
+
+### Install terragrunt 
+link: https://terragrunt.gruntwork.io/docs/getting-started/install/
 
 after install, run:
 ```sh
 terragrunt state rm "kubernetes_config_map.aws_auth[0]"
 ```
 
+### Install jq
 
-## Install jq 
-https://stedolan.github.io/jq/download/
+link: https://stedolan.github.io/jq/download/
 
-## Install helm3 
-https://helm.sh/docs/intro/install/
+### Install helm3
 
-## Install direnv 
+link: https://helm.sh/docs/intro/install/
+
+### Install direnv
 
 (from root) run:  
-    
+
 ```sh 
-$ curl -sfL https://direnv.net/install.sh | bash
+ curl -sfL https://direnv.net/install.sh | bash
 ```
-after install, run this command from main project: 
+
+after install, run this command from main project:
 
 ```sh
-$ direnv allow
+ direnv allow
 ```
 
-## Install kubectl
+### Install kubectl
 
-## install tilt
-https://tilt.dev/
+link: https://kubernetes.io/docs/tasks/tools/install-kubectl/
 
-## install kubernetes
-https://k3d.io/
+### install tilt
 
-## instal Kustomize
-https://kustomize.io/
+link: https://tilt.dev/
 
-# Sequency to create Infrastructure 
-Create the infrastructure using terragrunt, for each type of source, execute:
+### install kubernetes
 
-```sh 
-$ terragrunt init
-$ terragrunt plan
-$ terragrunt apply -auto-approve
+link: https://k3d.io/
+
+### install Kustomize
+
+link: https://kustomize.io/
+
+### install git submodule
+
+run command:
+
+```sh
+git submodule update --init --recursive
 ```
 
-# Sequency to destroy Infrastructure 
+---
+### Launch Cloud Infrastructure
+
+Command to create the infrastructure using terragrunt.
+From each Directories/sources:
+
+1. ../spire-lab/terragrunt/\<region\>/vpc
+
+2. ../spire-lab/terragrunt/\<region\>/eks
+
+3. ../spire-lab/terragrunt/\<region\>/eks-addons
+
+4. ../spire-lab/terragrunt/\<region\>/eks-spire
+
+5. ../spire-lab/terragrunt/\<region\>/aws-oidc-spire
+
+Basic for launch from terragrunt:
+
+```sh
+ terragrunt init
+ ```
+
+ ```sh
+ terragrunt plan
+ ```
+
+```sh
+terragrunt apply -auto-approve
+```
+
+Sequency to destroy Infrastructure
 Destroy environment, execute:
 
 ```sh
-$ terragrunt init
-$ terragrunt refresh
-$ terragrunt destroy -auto-approve
+terragrunt init
 ```
 
-
-## Directories/sources sequency
--  ../spire-lab/main/<<'region'>>/vpc
-
--  ../spire-lab/main/<region>/eks
-
--  ../spire-lab/main/<region>/eks-addons
-
--  ../spire-lab/main/<region>/eks-spire
-
--  ../spire-lab/main/<region>/aws-oidc-spire
-
-
-## test oidc return certified 
-run command: 
-```sh 
-$ curl -v https://oidc-discovery.k8sguru.info/keys
+```sh
+terragrunt refresh
 ```
 
+```sh
+terragrunt destroy -auto-approve
+```
 
-## test 
+Learn more in [terragrunt.io](https://terragrunt.gruntwork.io/)
+
+### test oidc return certified 
+after to create cloud environment, run command:
+
+```sh
+curl -v https://oidc-discovery.k8sguru.info/keys
+```
+
+### test 
 https://github.com/spiffe/spire-tutorials/blob/master/k8s/oidc-aws/client-deployment.yaml
+
+---
+
+## How to start environment
+
+Execute the follows steps:
+
+```sh
+<PROJECT_HOME>/k8s/scripts/$ ./1_start_k8s_cluster.sh
+```
+
+after kubernetes cluster is available, run:
+
+```sh
+<PROJECT_HOME>/k8s/$ tilt up
