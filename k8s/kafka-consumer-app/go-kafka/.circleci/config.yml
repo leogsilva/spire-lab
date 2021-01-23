@@ -1,0 +1,11 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: tiltdev/tilt:latest
+
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run: apt update && apt install -y golang git python
+      - run: with-kind-cluster.sh test/test.sh

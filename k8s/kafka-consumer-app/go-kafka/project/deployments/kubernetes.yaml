@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-kafka
+  labels:
+    app: go-kafka
+spec:
+  selector:
+    matchLabels:
+      app: go-kafka
+  template:
+    metadata:
+      labels:
+        app: go-kafka
+    spec:
+      containers:
+      - name: go-kafka
+        image: go-kafka
+        ports:
+        - containerPort: 8000

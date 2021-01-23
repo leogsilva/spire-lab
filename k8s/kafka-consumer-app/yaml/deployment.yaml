@@ -27,9 +27,12 @@ spec:
             runAsUser: 0
       containers:
         - name: app
-          image: nginx
+          image: go-kafka
         - name: envoy
           image: envoyproxy/envoy:v1.15.3
+          ports:
+            - containerPort: 8000
+              name: http 
           volumeMounts:
           - readOnly: true
             mountPath: /config

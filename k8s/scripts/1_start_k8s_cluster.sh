@@ -10,6 +10,12 @@
 
 set -o errexit
 
+if ! command -v k3d &> /dev/null
+then
+    echo "k3d could not be found"
+    exit
+fi
+
 # 🚨 only compatible with k3d v1.x (at least for now) 🚨
 if ! k3d version | grep 'v4' > /dev/null 2>&1; then
   echo "This script only works with k3d v4.x"
