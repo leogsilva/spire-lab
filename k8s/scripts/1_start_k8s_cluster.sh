@@ -34,6 +34,7 @@ for cluster in $(k3d ls 2>/dev/null | tail -n +4 | head -n -1 | awk '{print $2}'
   fi
 done
 
+k3d registry delete k3d-myregistry.localhost || true
 k3d registry create myregistry.localhost --port 5000
 k3d cluster create --registry-use k3d-myregistry.localhost:5000 ${CLUSTER_NAME} "$@"
 

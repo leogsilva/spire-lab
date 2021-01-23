@@ -4,6 +4,7 @@ metadata:
   name: example-app
   labels:
     app: example-app
+  namespace: kafkaconsumer  
 spec:
   replicas: 1
   selector:
@@ -28,21 +29,18 @@ spec:
         - name: app
           image: nginx
         - name: envoy
-          image: envoyproxy/envoy:v1.10.0
-          securityContext:
-            runAsUser: 1111
+          image: envoyproxy/envoy:v1.15.3
           volumeMounts:
           - readOnly: true
             mountPath: /config
             name: proxy-config
+          - name: spire-agent-socket
+            mountPath: /run/spire/sockets
+            readOnly: true             
           args:
           - "envoy"
           - "--config-path"
           - "/config/envoy.yaml"
-          volumeMounts:
-              - name: spire-agent-socket
-                mountPath: /run/spire/sockets
-                readOnly: true          
         - name: opa
           image: openpolicyagent/opa:0.26.0-istio-1
           securityContext:

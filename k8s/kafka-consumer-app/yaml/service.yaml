@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: example-app
+  namespace: kafkaconsumer
 spec:
   selector:
     app: example-app
@@ -9,5 +10,4 @@ spec:
   - name: http
     protocol: TCP
     port: 80
-    nodePort: 30808
-  type: LoadBalancer
+  type: ClusterIP

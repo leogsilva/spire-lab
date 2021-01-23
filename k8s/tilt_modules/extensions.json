@@ -1,0 +1,9 @@
+{
+  "Extensions": [
+    {
+      "Name": "configmap",
+      "ExtensionRegistry": "https://github.com/tilt-dev/tilt-extensions",
+      "TimeFetched": "2021-01-23T08:43:54.525825-03:00"
+    }
+  ]
+}
