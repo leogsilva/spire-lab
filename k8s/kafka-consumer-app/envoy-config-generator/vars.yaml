@@ -1,10 +1,10 @@
 name: test-service
-trustDomain: testing.internal
+trustDomain: example.org
 kafkaClusters:
   test-cluster:
     bootstrapPort: 9100
     brokers:
       kafka0:
         listenPort: 9101
-        brokerAddress: kafka0.internal
+        brokerAddress: kafka-cp-kafka
         brokerPort: 9093

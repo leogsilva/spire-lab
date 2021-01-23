@@ -17,4 +17,10 @@ kubectl exec -n spire spire-server-0 -- \
     -selector k8s:ns:default \
     -selector k8s:sa:default
 
-# kubectl apply -f k8s/yaml/client-deployment.yaml
+kubectl exec -n spire spire-server-0 -- \
+    /opt/spire/bin/spire-server entry create \
+    -registrationUDSPath /run/spire/sockets/registration.sock \
+    -spiffeID spiffe://example.org/ns/kafkaconsumer/sa/default \
+    -parentID spiffe://example.org/ns/spire/sa/spire-agent \
+    -selector k8s:ns:kafkaconsumer \
+    -selector k8s:sa:default
