@@ -71,5 +71,5 @@ k8s_resource('example-app', port_forwards='8080:8000',resource_deps=['deploy','g
 
 
 local_resource('attestation', cmd='scripts/attestation.sh')
-local_resource('integration tests', cmd='scripts/2_run_test.sh')
+local_resource('integration tests', cmd='scripts/4_create_topics.sh')
 

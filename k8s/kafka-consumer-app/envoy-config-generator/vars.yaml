@@ -7,6 +7,7 @@ kafkaClusters:
     spiffeId: spiffe://example.org/ns/default/sa/default
     brokers:
       kafka0:
-        listenPort: 9101
-        brokerAddress: kafka-cp-kafka
+        mtlsListenPort: 9101
+        listenPort: 9102
+        brokerAddress: kafka-cp-kafka.default
         brokerPort: 9093

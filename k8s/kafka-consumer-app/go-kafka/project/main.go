@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	kafka "github.com/segmentio/kafka-go"
 )
@@ -68,10 +69,9 @@ func NewExampleRouter(kafkaWriter *kafka.Writer) (*ExampleRouter, error) {
 		updateDuration: updateDuration,
 	}
 
-	fs := http.FileServer(http.Dir("./web"))
 	r.HandleFunc("/", router.index)
-	r.PathPrefix("/").Handler(fs)
 	r.HandleFunc("/producer", router.producerHandler(kafkaWriter))
+	r.HandleFunc("/connection", router.connection)
 
 	return router, nil
 }
@@ -92,11 +92,25 @@ func (r *ExampleRouter) index(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func (r *ExampleRouter) connection(w http.ResponseWriter, req *http.Request) {
+	conn, err := kafka.Dial("tcp", "localhost:9092")
+	if err != nil {
+		log.Fatalf("failed to dial leader: %v", err)
+	} else {
+		defer conn.Close()
+	}
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Connection established\n")
+
+}
+
 func main() {
 	// get kafka writer using environment variables.
 	kafkaURL := os.Getenv("kafkaURL")
 	topic := os.Getenv("topic")
 	kafkaWriter := getKafkaWriter(kafkaURL, topic)
+	log.Printf("kafkaURL %s\n", kafkaURL)
+	log.Printf("topic %s\n", topic)
 
 	defer kafkaWriter.Close()
 
@@ -108,7 +122,8 @@ func main() {
 
 	log.Println("Serving on port 80")
 	log.Printf("Deploy time: %s\n", router.updateTimeDisplay())
-	err = http.ListenAndServe(":80", nil)
+	loggedRouter := handlers.LoggingHandler(os.Stdout, router)
+	err = http.ListenAndServe(":80", loggedRouter)
 	if err != nil {
 		log.Fatalf("Server exited with: %v", err)
 	}
