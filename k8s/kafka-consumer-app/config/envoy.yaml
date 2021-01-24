@@ -1,10 +1,10 @@
 node:
-  cluster: test-service
-  id: test-service
+  cluster: kafkaconsumer
+  id: kafkaconsumer
 stats_config:
   stats_tags:
   - tag_name: "local_cluster"
-    fixed_value: "test-service"
+    fixed_value: "kafkaconsumer"
 admin:
   access_log_path: /dev/stdout
   address:
@@ -56,7 +56,7 @@ static_resources:
               tls_params:
                 tls_minimum_protocol_version: TLSv1_2
               tls_certificate_sds_secret_configs:
-              - name: "spiffe://example.org/test-service"
+              - name: "spiffe://example.org/ns/kafkaconsumer/sa/default"
                 sds_config:
                   api_config_source:
                     api_type: GRPC
@@ -66,7 +66,7 @@ static_resources:
               combined_validation_context:
                 default_validation_context:
                   match_subject_alt_names:
-                  - exact: "spiffe://example.org/test-cluster"
+                  - exact: "spiffe://example.org/ns/default/sa/default"
                 validation_context_sds_secret_config:
                   name: "spiffe://example.org"
                   sds_config:
@@ -112,7 +112,7 @@ static_resources:
               tls_params:
                 tls_minimum_protocol_version: TLSv1_2
               tls_certificate_sds_secret_configs:
-              - name: "spiffe://example.org/test-service"
+              - name: "spiffe://example.org/ns/kafkaconsumer/sa/default"
                 sds_config:
                   api_config_source:
                     api_type: GRPC
@@ -122,7 +122,7 @@ static_resources:
               combined_validation_context:
                 default_validation_context:
                   match_subject_alt_names:
-                  - exact: "spiffe://example.org/test-cluster"
+                  - exact: "spiffe://example.org/ns/default/sa/default"
                 validation_context_sds_secret_config:
                   name: "spiffe://example.org"
                   sds_config:
