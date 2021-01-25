@@ -298,7 +298,7 @@ spec:
         - name: "KAFKA_SPIRE_AGENT_SOCK"
           value: "unix:/run/spire/sockets/agent.sock"
         - name: "KAFKA_SPIRE_SPIFFE_IDS"
-          value: "spiffe://example.org/ns/default/sa/default"
+          value: "spiffe://example.org/ns/default/sa/default,spiffe://example.org/ns/kafkaconsumer/sa/default"
         - name: "KAFKA_SSL_CLIENT_AUTH"
           value: "required"
         - name: "KAFKA_SSL_ENABLED_PROTOCOLS"
