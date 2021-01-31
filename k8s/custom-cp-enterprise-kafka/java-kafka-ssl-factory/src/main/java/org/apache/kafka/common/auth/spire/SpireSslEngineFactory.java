@@ -12,7 +12,9 @@ import io.spiffe.provider.SpiffeSslContextFactory;
 import io.spiffe.spiffeid.SpiffeId;
 import io.spiffe.workloadapi.DefaultX509Source;
 import io.spiffe.workloadapi.X509Source;
+import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.config.SslClientAuth;
+import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.network.Mode;
 import org.apache.kafka.common.security.auth.SslEngineFactory;
 import org.apache.kafka.common.security.ssl.DefaultSslEngineFactory;
@@ -37,6 +39,8 @@ public class SpireSslEngineFactory implements SslEngineFactory {
     public static final String SPIFFE_IDS = "spire.spiffe.ids";
     private SSLContext sslContext;
     private SslClientAuth sslClientAuth;
+    private String protocol;
+    private String provider;
 
     @Override
     public SSLEngine createClientSslEngine(String peerHost, int peerPort, String endpointIdentification) {
@@ -108,9 +112,12 @@ public class SpireSslEngineFactory implements SslEngineFactory {
     }
 
     @Override
-    public void configure(Map<String, ?> configs) {
-        this.configs = Collections.unmodifiableMap(configs);
-
+    public void configure(Map<String, ?> cfg) {
+        this.configs = Collections.unmodifiableMap(cfg);
+        this.protocol = (String) configs.get(SslConfigs.SSL_PROTOCOL_CONFIG);
+        this.provider = (String) configs.get(SslConfigs.SSL_PROVIDER_CONFIG);
+        SecurityUtils.addConfiguredSecurityProviders(this.configs);
+        
         String rawSpiffeIds = (String) this.configs.get(SPIFFE_IDS);
         if (rawSpiffeIds == null) {
             throw new RuntimeException("Property " + SPIFFE_IDS + " not set");
@@ -136,8 +143,10 @@ public class SpireSslEngineFactory implements SslEngineFactory {
             this.sslContext = this.createSSLContext(x509Source, spiffeIds);
         } catch (SocketEndpointAddressException e) {
             log.error("Could not connecto to spire agent ", e);
+            throw new RuntimeException(e);
         } catch (X509SourceException e) {
             log.error("Could not obtain X509 certificates", e);
+            throw new RuntimeException(e);
         }
         this.sslClientAuth = createSslClientAuth((String)configs.get("ssl.client.auth"));
     }
@@ -146,6 +155,7 @@ public class SpireSslEngineFactory implements SslEngineFactory {
         Supplier<Set<SpiffeId>> acceptedSpiffeIds = () -> spiffeIds.stream().map(id -> SpiffeId.parse(id)).collect(Collectors.toSet());
         SpiffeSslContextFactory.SslContextOptions options = SpiffeSslContextFactory.SslContextOptions
                 .builder()
+                .sslProtocol(this.protocol)
                 .x509Source(x509Source)
                 .acceptedSpiffeIdsSupplier(acceptedSpiffeIds)
                 .build();
@@ -154,9 +164,9 @@ public class SpireSslEngineFactory implements SslEngineFactory {
         try {
             sslContext = SpiffeSslContextFactory.getSslContext(options);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new KafkaException(e);
         } catch (KeyManagementException e) {
-            throw new RuntimeException(e);
+            throw new KafkaException(e);
         }
         return sslContext;
     }

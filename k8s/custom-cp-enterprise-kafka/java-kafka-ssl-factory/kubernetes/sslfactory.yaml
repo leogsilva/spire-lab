@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: sslfactory
+  name: sslfactory
+  namespace: sslfactory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sslfactory
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: sslfactory
+    spec:
+      serviceAccount: sslfactory
+      containers:
+        - image: maven:3.5.3-jdk-8-alpine
+          name: myservice
+          command: ["/bin/sh"]
+          args: ["-c", "while true; do echo hello; sleep 10;done"]
+          resources: {}
+          ports:
+            - containerPort: 5000
+          # env:
+          #   - name: MAVEN_OPTS
+          #     value: "-Xnoagent -Xrunjdwp:transport=dt_socket,server=n,suspend=y,address=5000"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: spire-agent-socket
+              mountPath: /run/spire/sockets
+              readOnly: false
+            - mountPath: /root/.m2
+              name: maven 
+            - mountPath: /build
+              name: sslfactory                           
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
+        - name: maven
+          hostPath:
+            path: /m2
+        - name: sslfactory
+          hostPath:
+            path: /java-kafka-ssl-factory             
+status: {}

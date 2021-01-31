@@ -9,6 +9,7 @@
 # auto-detect the registry.
 
 set -o errexit
+set -x
 
 if ! command -v k3d &> /dev/null
 then
@@ -42,7 +43,8 @@ done
 
 k3d registry delete k3d-myregistry.localhost || true
 k3d registry create myregistry.localhost --port 5000
-k3d cluster create --registry-use k3d-myregistry.localhost:5000 ${CLUSTER_NAME} "$@"
+# k3d cluster create --registry-use k3d-myregistry.localhost:5000 -v ${HOME}/.m2:/m2 -v ${PROJECT_HOME}/custom-cp-enterprise-kafka/java-kafka-ssl-factory:/java-kafka-ssl-factory ${CLUSTER_NAME} --agents 1 -p "5000:30050@agent[0]" "$@"
+k3d cluster create ${CLUSTER_NAME} --registry-use k3d-myregistry.localhost:5000 -p "8082:30080@server[0]" -v ${HOME}/.m2:/m2 -v ${PROJECT_HOME}/custom-cp-enterprise-kafka/java-kafka-ssl-factory:/java-kafka-ssl-factory
 
 echo
 echo "Waiting for Kubeconfig to be ready..."

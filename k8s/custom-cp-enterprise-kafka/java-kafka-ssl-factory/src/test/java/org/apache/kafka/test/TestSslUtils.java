@@ -16,6 +16,7 @@
  */
 package org.apache.kafka.test;
 
+import org.apache.kafka.common.auth.spire.SpireSslEngineFactory;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.network.Mode;
 
@@ -158,9 +159,10 @@ public class TestSslUtils {
         saveKeyStore(ks, filename, password);
     }
 
-    public static Map<String, Object> createSslConfig(String keyManagerAlgorithm, String trustManagerAlgorithm, String tlsProtocol) {
+    public static Map<String, Object> createSslConfig(String keyManagerAlgorithm, String trustManagerAlgorithm, String tlsProtocol, Map<String,Object> extraConfig) {
         Map<String, Object> sslConfigs = new HashMap<>();
         sslConfigs.put(SslConfigs.SSL_PROTOCOL_CONFIG, tlsProtocol); // protocol to create SSLContext
+        sslConfigs.put(SslConfigs.SSL_ENGINE_FACTORY_CLASS_CONFIG, SpireSslEngineFactory.class);
 
         sslConfigs.put(SslConfigs.SSL_KEYMANAGER_ALGORITHM_CONFIG, keyManagerAlgorithm);
         sslConfigs.put(SslConfigs.SSL_TRUSTMANAGER_ALGORITHM_CONFIG, trustManagerAlgorithm);
@@ -168,7 +170,7 @@ public class TestSslUtils {
         List<String> enabledProtocols  = new ArrayList<>();
         enabledProtocols.add(tlsProtocol);
         sslConfigs.put(SslConfigs.SSL_ENABLED_PROTOCOLS_CONFIG, enabledProtocols);
-
+        sslConfigs.putAll(extraConfig);
         return sslConfigs;
     }
 
