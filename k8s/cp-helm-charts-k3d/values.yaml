@@ -65,6 +65,14 @@ cp-kafka:
   #  requests:
   #   cpu: 100m
   #   memory: 128Mi
+  # KAFKA_SSL_PROTOCOL: "Spiffe"
+    # KAFKA_SSL_PROVIDER: "Spiffe"  
+    # SPIFFE_ENDPOINT_SOCKET: "/tmp/agent.sock"
+
+
+    # KAFKA_SSL_ENABLED_PROTOCOLS: "TLSv1.2"
+    # KAFKA_SSL_KEYSTORE_TYPE: "Spiffe"
+    # KAFKA_OPTS: "-Djavax.net.debug=ssl:handshake:verbose"    
   securityContext: 
     runAsUser: 0
   configurationOverrides:
@@ -72,18 +80,14 @@ cp-kafka:
     "listener.security.protocol.map": |-
      PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,SSL:SSL
   customEnv: 
-    KAFKA_SSL_PROVIDER: "Spiffe"
-    KAFKA_PRINCIPAL_BUILDER_CLASS: "io.okro.kafka.SpiffePrincipalBuilder"
-    KAFKA_SSL_CLIENT_AUTH: "required"
-    SPIFFE_ENDPOINT_SOCKET: "/tmp/agent.sock"
-    KAFKA_SSL_KEYSTORE_FILENAME: kafka.broker.keystore.jks
+    KAFKA_OPTS: "-Djavax.net.debug=all"
+    KAFKA_SSL_KEYSTORE_FILENAME: kafka.broker.keystore.jks 
+    KAFKA_SSL_KEY_CREDENTIALS: broker_sslkey_creds 
     KAFKA_SSL_KEYSTORE_CREDENTIALS: broker_keystore_creds
-    KAFKA_SSL_KEY_CREDENTIALS: broker_sslkey_creds
     KAFKA_SSL_TRUSTSTORE_FILENAME: kafka.broker.truststore.jks
-    KAFKA_SSL_TRUSTSTORE_CREDENTIALS: broker_truststore_creds
-    KAFKA_SSL_ENABLED_PROTOCOLS: "TLSv1.2"
-    KAFKA_SSL_PROTOCOL: "Spiffe"
-    KAFKA_SSL_KEYSTORE_TYPE: "Spiffe"
+    KAFKA_SSL_TRUSTSTORE_CREDENTIALS: broker_truststore_creds          
+    KAFKA_PRINCIPAL_BUILDER_CLASS: "io.okro.kafka.SpiffePrincipalBuilder"
+    KAFKA_SSL_CLIENT_AUTH: "none"
     KAFKA_SSL_ENGINE_FACTORY_CLASS: "org.apache.kafka.common.auth.spire.SpireSslEngineFactory"
     KAFKA_SPIRE_AGENT_SOCK: "unix:/run/spire/sockets/agent.sock"
     KAFKA_SPIRE_SPIFFE_IDS: "spiffe://example.org/ns/default/sa/default,spiffe://example.org/ns/kafkaconsumer/sa/default"

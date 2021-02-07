@@ -15,16 +15,16 @@ spec:
       labels:
         app: example-app
     spec:
-      initContainers:
-        - name: proxy-init
-          image: openpolicyagent/proxy_init:v5
-          args: ["-p", "8000", "-u", "1111"]
-          securityContext:
-            capabilities:
-              add:
-              - NET_ADMIN
-            runAsNonRoot: false
-            runAsUser: 0
+      # initContainers:
+      #   - name: proxy-init
+      #     image: openpolicyagent/proxy_init:v5
+      #     args: ["-p", "8000", "-u", "1111"]
+      #     securityContext:
+      #       capabilities:
+      #         add:
+      #         - NET_ADMIN
+      #       runAsNonRoot: false
+      #       runAsUser: 0
       containers:
         - name: app
           image: go-kafka
@@ -49,21 +49,21 @@ spec:
           - "envoy"
           - "--config-path"
           - "/config/envoy.yaml"
-        - name: opa
-          image: openpolicyagent/opa:0.26.0-istio-1
-          securityContext:
-            runAsUser: 1111
-          volumeMounts:
-          - readOnly: true
-            mountPath: /policies
-            name: app-policy
-          args:
-          - "run"
-          - "--server"
-          - "--set=plugins.envoy_ext_authz_grpc.addr=:9191"
-          - "--set=plugins.envoy_ext_authz_grpc.query=data.system.main"
-          - "--ignore=.*"
-          - "/policies"
+        # - name: opa
+        #   image: openpolicyagent/opa:0.26.0-istio-1
+        #   securityContext:
+        #     runAsUser: 1111
+        #   volumeMounts:
+        #   - readOnly: true
+        #     mountPath: /policies
+        #     name: app-policy
+        #   args:
+        #   - "run"
+        #   - "--server"
+        #   - "--set=plugins.envoy_ext_authz_grpc.addr=:9191"
+        #   - "--set=plugins.envoy_ext_authz_grpc.query=data.system.main"
+        #   - "--ignore=.*"
+        #   - "/policies"
       volumes:
         - name: app-policy
           configMap:

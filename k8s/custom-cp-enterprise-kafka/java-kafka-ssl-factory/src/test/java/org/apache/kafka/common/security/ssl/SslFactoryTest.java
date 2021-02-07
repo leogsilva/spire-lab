@@ -126,20 +126,7 @@ public abstract class SslFactoryTest {
         SslFactory sslFactory = new SslFactory(Mode.SERVER);
         sslFactory.configure(serverSslConfig);
     }
-//
-//    @Test(expected = KafkaException.class)
-//    public void testSslFactoryWithIncorrectProviderClassConfiguration() {
-//        // An exception is thrown as the algorithm is not registered through a provider
-//        Map<String, Object> serverSslConfig = TestSslUtils.createSslConfig(
-//                TestKeyManagerFactory.ALGORITHM,
-//                TestTrustManagerFactory.ALGORITHM,
-//                tlsProtocol
-//        );
-//        serverSslConfig.put(SecurityConfig.SECURITY_PROVIDERS_CONFIG,
-//                "com.fake.ProviderClass1,com.fake.ProviderClass2");
-//        SslFactory sslFactory = new SslFactory(Mode.SERVER);
-//        sslFactory.configure(serverSslConfig);
-//    }
+
 //
 //    @Test
 //    public void testSslFactoryWithoutPasswordConfiguration() throws Exception {
@@ -157,19 +144,19 @@ public abstract class SslFactoryTest {
 //        }
 //    }
 //
-//    @Test
-//    public void testClientMode() throws Exception {
-//        File trustStoreFile = File.createTempFile("truststore", ".jks");
-//        Map<String, Object> clientSslConfig = sslConfigsBuilder(Mode.CLIENT)
-//                .createNewTrustStore(trustStoreFile)
-//                .useClientCert(false)
-//                .build();
-//        SslFactory sslFactory = new SslFactory(Mode.CLIENT);
-//        sslFactory.configure(clientSslConfig);
-//        //host and port are hints
-//        SSLEngine engine = sslFactory.createSslEngine("localhost", 0);
-//        assertTrue(engine.getUseClientMode());
-//    }
+    @Test
+    public void testClientMode() throws Exception {
+        File trustStoreFile = File.createTempFile("truststore", ".jks");
+        Map<String, Object> clientSslConfig = sslConfigsBuilder(Mode.CLIENT)
+                .createNewTrustStore(trustStoreFile)
+                .useClientCert(false)
+                .build();
+        SslFactory sslFactory = new SslFactory(Mode.CLIENT);
+        sslFactory.configure(clientSslConfig);
+        //host and port are hints
+        SSLEngine engine = sslFactory.createSslEngine("localhost", 0);
+        assertTrue(engine.getUseClientMode());
+    }
 //
 //    @Test
 //    public void staleSslEngineFactoryShouldBeClosed() throws IOException, GeneralSecurityException {

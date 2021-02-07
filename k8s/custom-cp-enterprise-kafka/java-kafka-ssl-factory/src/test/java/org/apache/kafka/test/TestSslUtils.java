@@ -162,7 +162,7 @@ public class TestSslUtils {
     public static Map<String, Object> createSslConfig(String keyManagerAlgorithm, String trustManagerAlgorithm, String tlsProtocol, Map<String,Object> extraConfig) {
         Map<String, Object> sslConfigs = new HashMap<>();
         sslConfigs.put(SslConfigs.SSL_PROTOCOL_CONFIG, tlsProtocol); // protocol to create SSLContext
-        sslConfigs.put(SslConfigs.SSL_ENGINE_FACTORY_CLASS_CONFIG, SpireSslEngineFactory.class);
+//        sslConfigs.put(SslConfigs.SSL_ENGINE_FACTORY_CLASS_CONFIG, SpireSslEngineFactory.class);
 
         sslConfigs.put(SslConfigs.SSL_KEYMANAGER_ALGORITHM_CONFIG, keyManagerAlgorithm);
         sslConfigs.put(SslConfigs.SSL_TRUSTMANAGER_ALGORITHM_CONFIG, trustManagerAlgorithm);

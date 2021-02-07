@@ -40,7 +40,6 @@ public class SpireSslEngineFactory implements SslEngineFactory {
     private SSLContext sslContext;
     private SslClientAuth sslClientAuth;
     private String protocol;
-    private String provider;
 
     @Override
     public SSLEngine createClientSslEngine(String peerHost, int peerPort, String endpointIdentification) {
@@ -79,13 +78,7 @@ public class SpireSslEngineFactory implements SslEngineFactory {
 
     @Override
     public KeyStore keystore() {
-        try {
-            KeyStore instance = KeyStore.getInstance(SpiffeProviderConstants.ALGORITHM);
-            return instance;
-        } catch (KeyStoreException e) {
-            log.error("Error returning keystore", e);
-        }
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -102,22 +95,18 @@ public class SpireSslEngineFactory implements SslEngineFactory {
 
     @Override
     public KeyStore truststore() {
-        try {
-            KeyStore instance = KeyStore.getInstance(SpiffeProviderConstants.ALGORITHM);
-            return instance;
-        } catch (KeyStoreException e) {
-            log.error("Error returning truststore", e);
-        }
-        return null;
+       throw new UnsupportedOperationException();
     }
 
     @Override
     public void configure(Map<String, ?> cfg) {
         this.configs = Collections.unmodifiableMap(cfg);
         this.protocol = (String) configs.get(SslConfigs.SSL_PROTOCOL_CONFIG);
-        this.provider = (String) configs.get(SslConfigs.SSL_PROVIDER_CONFIG);
         SecurityUtils.addConfiguredSecurityProviders(this.configs);
-        
+
+        log.info("Accepting any spiffe ids");
+        log.info("Property " + SslConfigs.SSL_PROTOCOL_CONFIG + ": " + this.protocol);
+
         String rawSpiffeIds = (String) this.configs.get(SPIFFE_IDS);
         if (rawSpiffeIds == null) {
             throw new RuntimeException("Property " + SPIFFE_IDS + " not set");
@@ -143,10 +132,10 @@ public class SpireSslEngineFactory implements SslEngineFactory {
             this.sslContext = this.createSSLContext(x509Source, spiffeIds);
         } catch (SocketEndpointAddressException e) {
             log.error("Could not connecto to spire agent ", e);
-            throw new RuntimeException(e);
+            throw new KafkaException(e);
         } catch (X509SourceException e) {
             log.error("Could not obtain X509 certificates", e);
-            throw new RuntimeException(e);
+            throw new KafkaException(e);
         }
         this.sslClientAuth = createSslClientAuth((String)configs.get("ssl.client.auth"));
     }
@@ -157,7 +146,8 @@ public class SpireSslEngineFactory implements SslEngineFactory {
                 .builder()
                 .sslProtocol(this.protocol)
                 .x509Source(x509Source)
-                .acceptedSpiffeIdsSupplier(acceptedSpiffeIds)
+                .acceptAnySpiffeId()
+//                .acceptedSpiffeIdsSupplier(acceptedSpiffeIds)
                 .build();
 
         SSLContext sslContext = null;

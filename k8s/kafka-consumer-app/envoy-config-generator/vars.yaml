@@ -1,13 +1,12 @@
 name: kafkaconsumer
-spiffeId: spiffe://example.org/ns/kafkaconsumer/sa/default
 trustDomain: example.org
+spiffeId: spiffe://example.org/ns/kafkaconsumer/sa/default
 kafkaClusters:
   test-cluster:
     bootstrapPort: 9100
     spiffeId: spiffe://example.org/ns/default/sa/default
     brokers:
       kafka0:
-        mtlsListenPort: 9101
-        listenPort: 9102
+        listenPort: 9101
         brokerAddress: kafka-cp-kafka.default
         brokerPort: 9093

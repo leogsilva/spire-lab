@@ -20,7 +20,6 @@ FROM confluentinc/cp-enterprise-kafka:6.0.1
 COPY --from=PROVIDER /usr/src/app/java-spiffe-provider-0.6.3-all-linux-x86_64.jar /usr/share/java/kafka/
 COPY --from=SPIFFE /usr/src/app/kafka-spiffe-principal/target/kafka-spiffe-principal-2.0.0.jar /usr/share/java/kafka/
 COPY --from=SSL_TARGET /build/target/java-kafka-ssl-factory-0.0.1.jar /usr/share/java/kafka/
-COPY java.security /usr/lib/jvm/zulu11/conf/security/
 COPY broker_keystore_creds /etc/kafka/secrets/broker_keystore_creds
 COPY broker_sslkey_creds /etc/kafka/secrets/broker_sslkey_creds
 COPY broker_truststore_creds /etc/kafka/secrets/broker_truststore_creds
