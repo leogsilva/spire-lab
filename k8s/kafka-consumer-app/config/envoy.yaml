@@ -71,7 +71,7 @@ static_resources:
             - endpoint:
                 address:
                   socket_address:
-                    address: kafka-cp-kafka.default
+                    address: kafka-proxy.default
                     port_value: 9093
 
         lb_policy: ROUND_ROBIN
@@ -126,7 +126,7 @@ static_resources:
             - endpoint:
                 address:
                   socket_address:
-                    address: kafka-cp-kafka.default
+                    address: kafka-proxy.default
                     port_value: 9093
         lb_policy: RANDOM
         upstream_connection_options:

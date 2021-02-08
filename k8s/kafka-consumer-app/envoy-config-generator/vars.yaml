@@ -8,5 +8,5 @@ kafkaClusters:
     brokers:
       kafka0:
         listenPort: 9101
-        brokerAddress: kafka-cp-kafka.default
+        brokerAddress: kafka-proxy.default
         brokerPort: 9093

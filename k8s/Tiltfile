@@ -41,6 +41,11 @@ watch_file('cp-helm-charts-k3d')
 load('ext://configmap', 'configmap_yaml')
 k8s_yaml('kafka-consumer-app/yaml/ns.yaml')
 
+k8s_yaml(configmap_yaml('kafka-proxy-config', namespace='default', from_file=['./custom-cp-enterprise-kafka/envoy-kafka/envoy.yaml']))
+k8s_yaml([
+  './custom-cp-enterprise-kafka/envoy-kafka/deployment.yaml',
+  './custom-cp-enterprise-kafka/envoy-kafka/service.yaml'])
+
 k8s_yaml(configmap_yaml('app-policy', namespace='kafkaconsumer', from_file=['./kafka-consumer-app/policies/allow_all.rego']))
 k8s_yaml(configmap_yaml('proxy-config', namespace='kafkaconsumer', from_file=['./kafka-consumer-app/config/envoy.yaml']))
 k8s_yaml(['kafka-consumer-app/yaml/deployment.yaml','kafka-consumer-app/yaml/service.yaml'])
