@@ -17,11 +17,11 @@ static_resources:
     - filters:
       - name: envoy.filters.network.kafka_broker
         typed_config:
-          "@type": type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker
+          "@type": type.googleapis.com/envoy.config.filter.network.kafka_broker.v2alpha1.KafkaBroker
           stat_prefix: exampleprefix
       - name: envoy.filters.network.tcp_proxy
         typed_config:
-          "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+          "@type": type.googleapis.com/envoy.config.filter.network.tcp_proxy.v2.TcpProxy
           stat_prefix: tcp
           cluster: localkafka
   - address:
@@ -32,17 +32,17 @@ static_resources:
     - filters:
       - name: envoy.filters.network.kafka_broker
         typed_config:
-          "@type": type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker
+          "@type": type.googleapis.com/envoy.config.filter.network.kafka_broker.v2alpha1.KafkaBroker
           stat_prefix: tlsprefix
       - name: envoy.filters.network.tcp_proxy
         typed_config:
-          "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+          "@type": type.googleapis.com/envoy.config.filter.network.tcp_proxy.v2.TcpProxy
           stat_prefix: tcp
           cluster: localkafka
       transport_socket:
         name: tls
         typed_config:
-          "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
+          "@type": type.googleapis.com/envoy.api.v2.auth.DownstreamTlsContext
           common_tls_context:
             tls_params:
               tls_minimum_protocol_version: TLSv1_2
@@ -50,7 +50,6 @@ static_resources:
             - name: "spiffe://example.org/ns/default/sa/default"
               sds_config:
                 api_config_source:
-                  transport_api_version: "V2"
                   api_type: GRPC
                   grpc_services:
                     envoy_grpc:
@@ -59,13 +58,12 @@ static_resources:
               # validate the SPIFFE ID of incoming clients (optionally)
               default_validation_context:
                 match_subject_alt_names:
-                  - exact: "spiffe://example.org"
+                  - exact: "spiffe://example.org/ns/kafkaconsumer/sa/default"
               # obtain the trust bundle from SDS
               validation_context_sds_secret_config:
                 name: "spiffe://example.org"
                 sds_config:
                   api_config_source:
-                    transport_api_version: "V2"
                     api_type: GRPC
                     grpc_services:
                       envoy_grpc:
