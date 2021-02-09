@@ -17,26 +17,22 @@ k8s_yaml([
     'spire-agent/agent-configmap.yaml',
     'spire-agent/agent-daemonset.yaml'
 ])
-
-# custom_build(
-#   'java-kafka-ssl-factory',
-#   'scripts/build_docker.sh $EXPECTED_REF',
-#   ['./java-kafka-ssl-factory'],
-#   skips_local_docker=True,disable_push=True
-# )
-# k8s_yaml(['app/client-deployment.yaml'])
+k8s_resource('spire-agent', resource_deps=['spire-server'])
 
 # Kafka installation
-custom_build(
-  'custom-cp-enterprise-kafka',
-  'custom-cp-enterprise-kafka/build_docker.sh $EXPECTED_REF',
-  ['./custom-cp-enterprise-kafka'],
-  skips_local_docker=True,disable_push=True
-)
+# deprecated. Moving to strimzi kafka
+k8s_yaml(['strimzi-kafka/ns.yaml','strimzi-kafka/strimzi-admin.yaml'])
+k8s_yaml(kustomize('strimzi-kafka'))
+# custom_build(
+#   'custom-cp-enterprise-kafka',
+#   'custom-cp-enterprise-kafka/build_docker.sh $EXPECTED_REF',
+#   ['./custom-cp-enterprise-kafka'],
+#   skips_local_docker=True,disable_push=True
+# )
 
-templated_yaml = local('./scripts/kustomize_kafka.sh')
-k8s_yaml(templated_yaml)
-watch_file('cp-helm-charts-k3d')
+# templated_yaml = local('./scripts/kustomize_kafka.sh')
+# k8s_yaml(templated_yaml)
+# watch_file('cp-helm-charts-k3d')
 
 load('ext://configmap', 'configmap_yaml')
 k8s_yaml('kafka-consumer-app/yaml/ns.yaml')
@@ -74,6 +70,6 @@ custom_build(
 k8s_resource('example-app', port_forwards='8080:8000',resource_deps=['deploy','go-kafka-compile'])
 
 
-local_resource('attestation', cmd='scripts/attestation.sh')
+local_resource('attestation', cmd='scripts/attestation.sh',resource_deps=['spire-server'])
 local_resource('integration tests', cmd='scripts/4_create_topics.sh')
 
