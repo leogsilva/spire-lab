@@ -1,0 +1,44 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kafka-proxy
+  labels:
+    app: kafka-proxy
+  namespace: default  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-proxy
+  template:
+    metadata:
+      labels:
+        app: kafka-proxy
+    spec:
+      containers:
+        - name: envoy
+          image: envoyproxy/envoy:v1.15.3
+          ports:
+            - containerPort: 19092
+              protocol: TCP
+            - containerPort: 19093
+              protocol: TCP              
+          volumeMounts:
+          - readOnly: true
+            mountPath: /config
+            name: proxy-config
+          - name: spire-agent-socket
+            mountPath: /run/spire/sockets
+            readOnly: true             
+          args:
+          - "envoy"
+          - "--config-path"
+          - "/config/envoy.yaml"
+      volumes:
+        - name: proxy-config
+          configMap:
+            name: kafka-proxy-config
+        - name: spire-agent-socket
+          hostPath:
+            path: /run/spire/sockets
+            type: Directory
