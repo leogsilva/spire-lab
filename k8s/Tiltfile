@@ -1,4 +1,3 @@
-print('Hello Tiltfile')
 
 allow_k8s_contexts('k3d-k3s-default')
 default_registry('k3d-myregistry.localhost:5000')
@@ -20,27 +19,17 @@ k8s_yaml([
 k8s_resource('spire-agent', resource_deps=['spire-server'])
 
 # Kafka installation
-# deprecated. Moving to strimzi kafka
 k8s_yaml(['strimzi-kafka/ns.yaml','strimzi-kafka/strimzi-admin.yaml'])
 k8s_yaml(kustomize('strimzi-kafka'))
-# custom_build(
-#   'custom-cp-enterprise-kafka',
-#   'custom-cp-enterprise-kafka/build_docker.sh $EXPECTED_REF',
-#   ['./custom-cp-enterprise-kafka'],
-#   skips_local_docker=True,disable_push=True
-# )
 
-# templated_yaml = local('./scripts/kustomize_kafka.sh')
-# k8s_yaml(templated_yaml)
-# watch_file('cp-helm-charts-k3d')
 
 load('ext://configmap', 'configmap_yaml')
 k8s_yaml('kafka-consumer-app/yaml/ns.yaml')
 
-k8s_yaml(configmap_yaml('kafka-proxy-config', namespace='default', from_file=['./custom-cp-enterprise-kafka/envoy-kafka/envoy.yaml']))
+k8s_yaml(configmap_yaml('kafka-proxy-config', namespace='default', from_file=['./envoy-kafka/envoy.yaml']))
 k8s_yaml([
-  './custom-cp-enterprise-kafka/envoy-kafka/deployment.yaml',
-  './custom-cp-enterprise-kafka/envoy-kafka/service.yaml'])
+  './envoy-kafka/deployment.yaml',
+  './envoy-kafka/service.yaml'])
 
 k8s_yaml(configmap_yaml('app-policy', namespace='kafkaconsumer', from_file=['./kafka-consumer-app/policies/allow_all.rego']))
 k8s_yaml(configmap_yaml('proxy-config', namespace='kafkaconsumer', from_file=['./kafka-consumer-app/config/envoy.yaml']))
