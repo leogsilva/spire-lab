@@ -4,9 +4,9 @@ spiffeId: spiffe://example.org/ns/kafkaconsumer/sa/default
 kafkaClusters:
   test-cluster:
     bootstrapPort: 9100
-    spiffeId: spiffe://example.org/ns/default/sa/default
+    spiffeId: spiffe://example.org/ns/local-kafka/sa/default
     brokers:
       kafka0:
         listenPort: 9101
-        brokerAddress: kafka-proxy.default
+        brokerAddress: kafka-service.local-kafka
         brokerPort: 9093

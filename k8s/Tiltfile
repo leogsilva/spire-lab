@@ -18,9 +18,9 @@ k8s_yaml([
 ])
 k8s_resource('spire-agent', resource_deps=['spire-server'])
 
-# Kafka installation
-k8s_yaml(['strimzi-kafka/ns.yaml','strimzi-kafka/strimzi-admin.yaml'])
-k8s_yaml(kustomize('strimzi-kafka'))
+# Strimzi Kafka installation
+# k8s_yaml(['strimzi-kafka/ns.yaml','strimzi-kafka/strimzi-admin.yaml'])
+# k8s_yaml(kustomize('strimzi-kafka'))
 
 
 load('ext://configmap', 'configmap_yaml')
@@ -55,6 +55,14 @@ custom_build(
   ['./kafka-consumer-app/go-kafka'],
   skips_local_docker=True,disable_push=True
 )
+
+custom_build(
+  'bare-kafka',
+  'bare-kafka/build_docker.sh $EXPECTED_REF',
+  ['./bare-kafka/docker'],
+  skips_local_docker=True,disable_push=True
+)
+k8s_yaml(['bare-kafka/kubernetes/ns.yaml','bare-kafka/kubernetes/kafka.yaml'])
 
 k8s_resource('example-app', port_forwards='8080:8000',resource_deps=['deploy','go-kafka-compile'])
 
