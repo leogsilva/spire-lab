@@ -181,7 +181,7 @@ apk add py-pip openssl
 pip install kafka-python
 apk add python3
 
-from kafka import KafkaConsumer
+
 consumer = KafkaConsumer('sample', bootstrap_servers='localhost:9100')
 consumer = KafkaConsumer('sample', bootstrap_servers='kafka-proxy.default.svc.cluster.local:9094')
 for message in consumer:
