@@ -47,7 +47,7 @@ static_resources:
             tls_params:
               tls_minimum_protocol_version: TLSv1_2
             tls_certificate_sds_secret_configs:
-            - name: "spiffe://example.org/ns/default/sa/default"
+            - name: "spiffe://example.org/ns/kafka/sa/default"
               sds_config:
                 api_config_source:
                   api_type: GRPC

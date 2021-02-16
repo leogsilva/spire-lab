@@ -38,7 +38,7 @@ static_resources:
         transport_socket:
           name: "envoy.transport_sockets.tls"
           typed_config:
-            "@type": type.googleapis.com/envoy.api.v2.auth.UpstreamTlsContext
+            "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
             common_tls_context:
               tls_params:
                 tls_minimum_protocol_version: TLS_AUTO
@@ -96,10 +96,12 @@ static_resources:
         transport_socket:
           name: "envoy.transport_sockets.tls"
           typed_config:
-            "@type": type.googleapis.com/envoy.api.v2.auth.UpstreamTlsContext
+            "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
             common_tls_context:
               tls_params:
                 tls_minimum_protocol_version: TLS_AUTO
+                ecdh_curves:
+                - X25519:P-256:P-521:P-384
               tls_certificate_sds_secret_configs:
               - name: "{{ spiffeId }}"
                 sds_config:
@@ -150,11 +152,11 @@ static_resources:
         - filters:
           - name: envoy.filters.network.kafka_broker
             typed_config:
-              "@type": type.googleapis.com/envoy.config.filter.network.kafka_broker.v2alpha1.KafkaBroker
+              "@type": type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker
               stat_prefix: kafka_k_{{ kafkaClusterName }}_bootstrap
           - name: envoy.tcp_proxy
             typed_config:
-              "@type": type.googleapis.com/envoy.config.filter.network.tcp_proxy.v2.TcpProxy
+              "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
               stat_prefix: kafka_t_{{ kafkaClusterName }}_bootstrap
               cluster: kafka_{{ kafkaClusterName }}_bootstrap
               access_log:
@@ -183,11 +185,11 @@ static_resources:
         - filters:
           - name: envoy.filters.network.kafka_broker
             typed_config:
-              "@type": type.googleapis.com/envoy.config.filter.network.kafka_broker.v2alpha1.KafkaBroker
+              "@type": type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker
               stat_prefix: kafka_k_{{ kafkaClusterName }}_{{ brokerName }}
           - name: envoy.tcp_proxy
             typed_config:
-              "@type": type.googleapis.com/envoy.config.filter.network.tcp_proxy.v2.TcpProxy
+              "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
               stat_prefix: kafka_t_{{ kafkaClusterName }}_{{ brokerName }}
               cluster: kafka_{{ kafkaClusterName }}_{{ brokerName }}
               access_log:

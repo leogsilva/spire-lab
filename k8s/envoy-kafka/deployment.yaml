@@ -4,7 +4,7 @@ metadata:
   name: kafka-proxy
   labels:
     app: kafka-proxy
-  namespace: default  
+  namespace: kafka  
 spec:
   replicas: 1
   selector:

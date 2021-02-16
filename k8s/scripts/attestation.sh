@@ -60,7 +60,7 @@ kubectl exec -n spire spire-server-0 -- \
 kubectl exec -n spire spire-server-0 -- \
     /opt/spire/bin/spire-server entry create \
     -registrationUDSPath /run/spire/sockets/registration.sock \
-    -spiffeID spiffe://example.org/ns/local-kafka/sa/default \
+    -spiffeID spiffe://example.org/ns/kafka/sa/default \
     -parentID spiffe://example.org/ns/spire/sa/spire-agent \
-    -selector k8s:ns:local-kafka \
+    -selector k8s:ns:kafka \
     -selector k8s:sa:default  

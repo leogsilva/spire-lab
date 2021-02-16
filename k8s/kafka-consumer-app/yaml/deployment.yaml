@@ -27,12 +27,12 @@ spec:
       #       runAsUser: 0
       containers:
         - name: app
-          image: go-kafka
-          env:
-          - name: kafkaURL
-            value: 127.0.0.1:9101
-          - name: topic
-            value: simple-consumer
+          image: alpine:latest
+          command:
+          - sh
+          - -c
+          - sleep 100000
+
         - name: envoy
           image: envoyproxy/envoy:v1.15.3
           ports:

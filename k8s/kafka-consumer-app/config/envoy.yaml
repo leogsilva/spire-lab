@@ -55,7 +55,7 @@ static_resources:
               combined_validation_context:
                 default_validation_context:
                   match_subject_alt_names:
-                  - exact: "spiffe://example.org/ns/local-kafka/sa/default"
+                  - exact: "spiffe://example.org/ns/kafka/sa/default"
                 validation_context_sds_secret_config:
                   name: "spiffe://example.org"
                   sds_config:
@@ -73,7 +73,7 @@ static_resources:
             - endpoint:
                 address:
                   socket_address:
-                    address: kafka-service.local-kafka
+                    address: kafka-proxy.kafka
                     port_value: 9093
 
         lb_policy: ROUND_ROBIN
@@ -100,8 +100,6 @@ static_resources:
             common_tls_context:
               tls_params:
                 tls_minimum_protocol_version: TLS_AUTO
-                ecdh_curves:
-                - X25519:P-256:P-521:P-384
               tls_certificate_sds_secret_configs:
               - name: "spiffe://example.org/ns/kafkaconsumer/sa/default"
                 sds_config:
@@ -113,7 +111,7 @@ static_resources:
               combined_validation_context:
                 default_validation_context:
                   match_subject_alt_names:
-                  - exact: "spiffe://example.org/ns/local-kafka/sa/default"
+                  - exact: "spiffe://example.org/ns/kafka/sa/default"
                 validation_context_sds_secret_config:
                   name: "spiffe://example.org"
                   sds_config:
@@ -130,7 +128,7 @@ static_resources:
             - endpoint:
                 address:
                   socket_address:
-                    address: kafka-service.local-kafka
+                    address: kafka-proxy.kafka
                     port_value: 9093
         lb_policy: RANDOM
         upstream_connection_options:
@@ -207,3 +205,4 @@ static_resources:
                     upstream_cluster: "%UPSTREAM_CLUSTER%"
                     upstream_host: "%UPSTREAM_HOST%"
                     upstream_transport_failure_reason: "%UPSTREAM_TRANSPORT_FAILURE_REASON%"
+
