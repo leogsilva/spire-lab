@@ -1,13 +1,11 @@
 #!/bin/bash
 
-set -o errexit
+set -x -o errexit
 
-if ! command -v j2 &> /dev/null
-then
-    echo "j2 could not be found"
-    exit
-fi
-
-pushd ${PROJECT_HOME}/kafka-consumer-app/envoy-config-generator
-j2 envoy.yaml.j2 vars.yaml > ${PROJECT_HOME}/kafka-consumer-app/config/envoy.yaml
+docker pull dinutac/jinja2docker:latest
+pushd ${PROJECT_HOME}/kafka-consumer-app
+docker run --rm -v ${PWD}/envoy-config-generator:/templates \
+-v ${PWD}/envoy-config-generator:/variables \
+-v ${PWD}/config/:/tmp \
+dinutac/jinja2docker:latest /templates/envoy.yaml.j2 /variables/vars.yaml --format=yaml
 popd

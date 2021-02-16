@@ -188,6 +188,7 @@ for message in consumer:
     print (message)
 
 from kafka import KafkaProducer
+
 producer = KafkaProducer(bootstrap_servers='127.0.0.1:9100')
 producer.send('sample', b'Go Spire')
 producer.send('sample', key=b'message-two', value=b'This is Kafka-Python')
@@ -202,3 +203,402 @@ To produce a message directly to kafka
 ```sh
 kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.21.1-kafka-2.7.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap:9092 --topic my-topic
 ```
+
+System property jdk.tls.client.cipherSuites is set to 'null'
+System property jdk.tls.server.cipherSuites is set to 'null'
+Ignoring disabled cipher suite: TLS_DH_anon_WITH_AES_256_CBC_SHA
+Ignoring disabled cipher suite: TLS_DH_anon_WITH_AES_256_CBC_SHA256
+Ignoring disabled cipher suite: TLS_ECDHE_RSA_WITH_NULL_SHA
+Ignoring disabled cipher suite: SSL_RSA_WITH_DES_CBC_SHA
+Ignoring disabled cipher suite: SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA
+Ignoring disabled cipher suite: TLS_KRB5_WITH_DES_CBC_MD5
+Ignoring disabled cipher suite: TLS_ECDH_RSA_WITH_NULL_SHA
+Ignoring disabled cipher suite: SSL_DH_anon_EXPORT_WITH_RC4_40_MD5
+Ignoring disabled cipher suite: SSL_DH_anon_WITH_DES_CBC_SHA
+Ignoring disabled cipher suite: TLS_DH_anon_WITH_AES_128_CBC_SHA
+Ignoring disabled cipher suite: TLS_KRB5_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_KRB5_WITH_DES_CBC_SHA
+Ignoring disabled cipher suite: TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5
+Ignoring disabled cipher suite: TLS_ECDHE_ECDSA_WITH_RC4_128_SHA
+Ignoring disabled cipher suite: SSL_DHE_RSA_WITH_DES_CBC_SHA
+Ignoring disabled cipher suite: TLS_KRB5_WITH_3DES_EDE_CBC_MD5
+Ignoring disabled cipher suite: SSL_DH_anon_WITH_RC4_128_MD5
+Ignoring disabled cipher suite: TLS_ECDHE_ECDSA_WITH_NULL_SHA
+Ignoring disabled cipher suite: SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_RSA_WITH_NULL_SHA256
+Ignoring disabled cipher suite: TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_DH_anon_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_anon_WITH_NULL_SHA
+Ignoring disabled cipher suite: SSL_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_anon_WITH_RC4_128_SHA
+Ignoring disabled cipher suite: SSL_DHE_DSS_WITH_DES_CBC_SHA
+Ignoring disabled cipher suite: TLS_KRB5_EXPORT_WITH_RC4_40_SHA
+Ignoring disabled cipher suite: SSL_RSA_EXPORT_WITH_DES40_CBC_SHA
+Ignoring disabled cipher suite: TLS_KRB5_WITH_RC4_128_SHA
+Ignoring disabled cipher suite: TLS_ECDH_anon_WITH_AES_256_CBC_SHA
+Ignoring disabled cipher suite: SSL_RSA_EXPORT_WITH_RC4_40_MD5
+Ignoring disabled cipher suite: TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA
+Ignoring disabled cipher suite: TLS_KRB5_EXPORT_WITH_RC4_40_MD5
+Ignoring disabled cipher suite: TLS_ECDH_anon_WITH_AES_128_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_ECDSA_WITH_RC4_128_SHA
+Ignoring disabled cipher suite: TLS_KRB5_WITH_RC4_128_MD5
+Ignoring disabled cipher suite: TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_RSA_WITH_RC4_128_SHA
+Ignoring disabled cipher suite: TLS_ECDH_ECDSA_WITH_NULL_SHA
+Ignoring disabled cipher suite: TLS_ECDH_anon_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_RSA_WITH_RC4_128_SHA
+Ignoring disabled cipher suite: SSL_DH_anon_EXPORT_WITH_DES40_CBC_SHA
+Ignoring disabled cipher suite: SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_RSA_WITH_NULL_SHA
+Ignoring disabled cipher suite: TLS_ECDHE_RSA_WITH_RC4_128_SHA
+Ignoring disabled cipher suite: SSL_RSA_WITH_RC4_128_MD5
+Ignoring disabled cipher suite: TLS_DH_anon_WITH_AES_128_CBC_SHA256
+Ignoring disabled cipher suite: SSL_RSA_WITH_NULL_MD5
+Ignoring disabled cipher suite: TLS_DH_anon_WITH_AES_128_GCM_SHA256
+Ignoring disabled cipher suite: TLS_DH_anon_WITH_AES_256_GCM_SHA384
+Ignoring disabled cipher suite: TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA
+Ignoring disabled cipher suite: SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA
+
+*** ClientHello, TLSv1.2
+RandomCookie:  GMT: 1672555475 bytes = { 113, 140, 241, 192, 247, 54, 13, 95, 206, 141, 204, 235, 73, 226, 91, 193, 223, 248, 195, 44, 30, 74, 249, 158, 12, 141, 92, 11 }
+Session ID:  {96, 42, 106, 141, 179, 198, 178, 142, 109, 135, 53, 101, 133, 27, 228, 76, 59, 17, 240, 19, 110, 71, 23, 43, 158, 166, 159, 133, 241, 141, 186, 208}
+Cipher Suites: [TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, Unknown 0xcc:0xa9, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, Unknown 0xcc:0xa8, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_AES_256_CBC_SHA]
+Compression Methods:  { 0 }
+Extension extended_master_secret
+Extension renegotiation_info, renegotiated_connection: <empty>
+Extension elliptic_curves, curve names: {unknown curve 29, secp256r1}
+Extension ec_point_formats, formats: [uncompressed]
+Unsupported extension type_35, data: 
+Extension signature_algorithms, signature_algorithms: SHA256withECDSA, Unknown (hash:0x8, signature:0x4), SHA256withRSA, SHA384withECDSA, Unknown (hash:0x8, signature:0x5), SHA384withRSA, Unknown (hash:0x8, signature:0x6), SHA512withRSA, SHA1withRSA
+***
+%% Initialized:  [Session-5, SSL_NULL_WITH_NULL_NULL]
+Standard ciphersuite chosen: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+%% Negotiating:  [Session-5, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256]
+*** ServerHello, TLSv1.2
+RandomCookie:  GMT: 1613392273 bytes = { 160, 31, 167, 36, 213, 173, 103, 104, 96, 18, 248, 118, 165, 217, 222, 52, 157, 254, 232, 225, 239, 140, 252, 37, 33, 28, 103, 29 }
+Session ID:  {96, 42, 106, 145, 107, 33, 88, 183, 165, 250, 158, 149, 204, 161, 207, 166, 27, 13, 13, 157, 234, 186, 155, 85, 30, 151, 178, 87, 4, 70, 193, 111}
+Cipher Suite: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+Compression Method: 0
+Extension renegotiation_info, renegotiated_connection: <empty>
+Extension extended_master_secret
+***
+Cipher suite:  TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+update handshake state: server_hello[2]
+upcoming handshake states: server certificate[11]
+upcoming handshake states: server_key_exchange[12](optional)
+upcoming handshake states: certificate_request[13](optional)
+upcoming handshake states: server_hello_done[14]
+upcoming handshake states: client certificate[11](optional)
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** Certificate chain
+chain [0] = [
+[
+  Version: V3
+  Subject: O=SPIRE, C=US
+  Signature Algorithm: SHA256withRSA, OID = 1.2.840.113549.1.1.11
+
+  Key:  Sun EC public key, 256 bits
+  public x coord: 18154406837483895621712836082960845683266406736223360403695438445448499371517
+  public y coord: 26629868333460170937257187681834540341112136914861732164131273310476036325924
+  parameters: secp256r1 [NIST P-256, X9.62 prime256v1] (1.2.840.10045.3.1.7)
+  Validity: [From: Mon Feb 15 12:28:30 GMT 2021,
+               To: Mon Feb 15 13:28:40 GMT 2021]
+  Issuer: O=SPIFFE, C=US
+  SerialNumber: [    f876b174 3f0cdeec 88730df2 a7958b17]
+
+Certificate Extensions: 6
+[1]: ObjectId: 2.5.29.35 Criticality=false
+AuthorityKeyIdentifier [
+KeyIdentifier [
+0000: 3B 66 49 6C DC 79 98 F0   0D 43 3E 96 10 69 91 0F  ;fIl.y...C>..i..
+0010: 4B 1D 4E 30                                        K.N0
+]
+]
+
+[2]: ObjectId: 2.5.29.19 Criticality=true
+BasicConstraints:[
+  CA:false
+  PathLen: undefined
+]
+
+[3]: ObjectId: 2.5.29.37 Criticality=false
+ExtendedKeyUsages [
+  serverAuth
+  clientAuth
+]
+
+[4]: ObjectId: 2.5.29.15 Criticality=true
+KeyUsage [
+  DigitalSignature
+  Key_Encipherment
+  Key_Agreement
+]
+
+[5]: ObjectId: 2.5.29.17 Criticality=false
+SubjectAlternativeName [
+  URIName: spiffe://example.org/ns/local-kafka/sa/default
+]
+
+[6]: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 1B 46 93 E1 C5 D8 F4 2C   6B E8 FA 1E F7 CF 18 38  .F.....,k......8
+0010: 13 66 92 54                                        .f.T
+]
+]
+
+]
+  Algorithm: [SHA256withRSA]
+  Signature:
+0000: B5 D1 DC 5D 40 B7 EA 08   31 FF EA DB E5 6D 22 78  ...]@...1....m"x
+0010: FB 49 CF 82 CD 25 A4 39   04 C6 97 1C D5 75 91 8B  .I...%.9.....u..
+0020: 49 44 65 CD 05 40 CB CD   34 93 BD A0 0D 1F 64 FF  IDe..@..4.....d.
+0030: FE BA 79 9B D1 80 85 3B   44 EE 19 41 5D 9D 01 67  ..y....;D..A]..g
+0040: 78 8D C6 30 33 7E 73 51   EB E8 AA B0 54 E7 AB 28  x..03.sQ....T..(
+0050: E4 8C F0 F9 C6 E6 7C B9   74 4C B0 2D 1B D1 4B E9  ........tL.-..K.
+0060: F9 1E B5 85 F6 08 3C B2   96 8C 0E 33 BE 65 FA C1  ......<....3.e..
+0070: 5E 90 CD 79 39 C2 46 4F   46 E4 18 B5 A4 F6 64 A0  ^..y9.FOF.....d.
+0080: 78 81 B4 B4 4E 44 95 28   96 56 CD C3 57 8D C4 38  x...ND.(.V..W..8
+0090: 4A 7C 70 F6 E3 56 F8 B3   2A 37 A1 4C 9F 97 09 60  J.p..V..*7.L...`
+00A0: B6 6C 93 84 23 E1 25 91   AC 6D E7 22 5F 78 41 54  .l..#.%..m."_xAT
+00B0: C2 43 4B 8C 2E 87 BA 90   5A 5F 41 B0 E9 84 7D EA  .CK.....Z_A.....
+00C0: 0E 88 8F 8D D7 50 B9 4D   5A 53 D6 7F 1F D4 51 AB  .....P.MZS....Q.
+00D0: 39 E1 48 95 78 10 AA 7B   60 4B 33 43 7E 35 93 0C  9.H.x...`K3C.5..
+00E0: 13 68 CB 5A 17 AA 62 51   B7 87 0A 02 F8 0D 06 24  .h.Z..bQ.......$
+00F0: 7A 3E 6F 7B DC 30 D3 73   B4 A4 F6 F4 56 BB F4 72  z>o..0.s....V..r
+
+]
+***
+update handshake state: certificate[11]
+upcoming handshake states: server_key_exchange[12](optional)
+upcoming handshake states: certificate_request[13](optional)
+upcoming handshake states: server_hello_done[14]
+upcoming handshake states: client certificate[11](optional)
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** ECDH ServerKeyExchange
+Signature Algorithm SHA256withECDSA
+Server key: Sun EC public key, 256 bits
+  public x coord: 32389531136380511871073611679573819687593111186134529534016277466689510677101
+  public y coord: 114141901748956812562878733970187333134625512304895364268773316767847012105976
+  parameters: secp256r1 [NIST P-256, X9.62 prime256v1] (1.2.840.10045.3.1.7)
+update handshake state: server_key_exchange[12]
+upcoming handshake states: certificate_request[13](optional)
+upcoming handshake states: server_hello_done[14]
+upcoming handshake states: client certificate[11](optional)
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** CertificateRequest
+Cert Types: RSA, DSS, ECDSA
+Supported Signature Algorithms: SHA512withECDSA, SHA512withRSA, SHA384withECDSA, SHA384withRSA, SHA256withECDSA, SHA256withRSA, SHA256withDSA, SHA224withECDSA, SHA224withRSA, SHA224withDSA, SHA1withECDSA, SHA1withRSA, SHA1withDSA
+Cert Authorities:
+<Empty>
+update handshake state: unknown[13]
+upcoming handshake states: server_hello_done[14]
+upcoming handshake states: client certificate[11](optional)
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** ServerHelloDone
+update handshake state: server_hello_done[14]
+upcoming handshake states: client certificate[11](optional)
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, WRITE: TLSv1.2 Handshake, length = 983
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, READ: TLSv1.2 Handshake, length = 710
+check handshake state: certificate[11]
+update handshake state: certificate[11]
+upcoming handshake states: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** Certificate chain
+chain [0] = [
+[
+  Version: V3
+  Subject: O=SPIRE, C=US
+  Signature Algorithm: SHA256withRSA, OID = 1.2.840.113549.1.1.11
+
+  Key:  Sun EC public key, 256 bits
+  public x coord: 26852935644947974847914477064554766693925057316081985007394280239967371593287
+  public y coord: 98827782717846697356783821307869611328305952078274922850036687517503567903938
+  parameters: secp256r1 [NIST P-256, X9.62 prime256v1] (1.2.840.10045.3.1.7)
+  Validity: [From: Mon Feb 15 12:28:30 GMT 2021,
+               To: Mon Feb 15 13:28:40 GMT 2021]
+  Issuer: O=SPIFFE, C=US
+  SerialNumber: [    3f3ca2ae f2a1ec60 c0ebe143 fd2e675e]
+
+Certificate Extensions: 6
+[1]: ObjectId: 2.5.29.35 Criticality=false
+AuthorityKeyIdentifier [
+KeyIdentifier [
+0000: 3B 66 49 6C DC 79 98 F0   0D 43 3E 96 10 69 91 0F  ;fIl.y...C>..i..
+0010: 4B 1D 4E 30                                        K.N0
+]
+]
+
+[2]: ObjectId: 2.5.29.19 Criticality=true
+BasicConstraints:[
+  CA:false
+  PathLen: undefined
+]
+
+[3]: ObjectId: 2.5.29.37 Criticality=false
+ExtendedKeyUsages [
+  serverAuth
+  clientAuth
+]
+
+[4]: ObjectId: 2.5.29.15 Criticality=true
+KeyUsage [
+  DigitalSignature
+  Key_Encipherment
+  Key_Agreement
+]
+
+[5]: ObjectId: 2.5.29.17 Criticality=false
+SubjectAlternativeName [
+  URIName: spiffe://example.org/ns/kafkaconsumer/sa/default
+]
+
+[6]: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 14 FE DE DE A4 C9 22 FE   52 6D 4A 7D 9F 18 80 A8  ......".RmJ.....
+0010: E4 98 C0 CC                                        ....
+]
+]
+
+]
+  Algorithm: [SHA256withRSA]
+  Signature:
+0000: 38 81 72 27 57 C1 7A 28   CF 88 FE 3A CD F1 A1 2D  8.r'W.z(...:...-
+0010: 63 5A F2 DB ED EC A2 AC   B3 16 E6 16 BE 7C 57 23  cZ............W#
+0020: 5B 21 99 F2 D9 DD 0C 43   31 C0 13 93 BA 7E 63 C4  [!.....C1.....c.
+0030: 57 44 3F 98 AC 5C 0E 7E   4F A5 85 51 43 C9 9F 13  WD?..\..O..QC...
+0040: 28 CD E0 49 CA FE B6 F4   01 DE A1 50 6D D5 48 6C  (..I.......Pm.Hl
+0050: 1D D2 44 44 C6 2D 6D A5   14 0C B3 5F 6C A5 96 8E  ..DD.-m...._l...
+0060: 0C CB 01 95 45 8C DA BE   4E 62 4D 49 EE F9 F5 E0  ....E...NbMI....
+0070: 04 32 8D 6E 5B 7A 7C F3   A7 F0 EF A8 0A 7D DC 1D  .2.n[z..........
+0080: 33 5F AE 21 60 48 4F 69   40 C5 07 A8 C7 1A F7 F2  3_.!`HOi@.......
+0090: 68 7D 29 B2 C2 D5 AD 40   6C 63 13 EC CB DA 8C F4  h.)....@lc......
+00A0: 53 6B 56 8E 52 99 0C 52   BA 8D A9 CF 9D A8 8B 6D  SkV.R..R.......m
+00B0: 7B 14 77 C6 7D A7 9C E8   9D C0 ED 34 12 1B E2 C4  ..w........4....
+00C0: 13 5A BF E6 4F ED E5 14   A2 D8 17 D9 B2 D2 96 EB  .Z..O...........
+00D0: CC 43 E9 FE 49 E2 4B 6D   0A F4 35 77 8F E6 A6 DB  .C..I.Km..5w....
+00E0: 08 18 8F 5A 3A BF 02 16   EF 0A 3B BD FE 93 6C CF  ...Z:.....;...l.
+00F0: 9F E7 49 62 5A A3 15 5E   57 55 E8 1C D9 5F 60 BE  ..IbZ..^WU..._`.
+
+]
+***
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, READ: TLSv1.2 Handshake, length = 70
+check handshake state: client_key_exchange[16]
+update handshake state: client_key_exchange[16]
+upcoming handshake states: certificate_verify[15](optional)
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** ECDHClientKeyExchange
+ECDH Public value:  { 4, 232, 215, 44, 33, 161, 4, 101, 77, 40, 39, 36, 143, 85, 33, 187, 140, 234, 93, 58, 40, 51, 37, 244, 141, 182, 139, 34, 70, 85, 53, 159, 131, 81, 253, 174, 50, 221, 194, 161, 231, 229, 215, 14, 132, 218, 53, 21, 198, 140, 62, 2, 250, 147, 197, 104, 144, 195, 136, 218, 117, 98, 160, 120, 207 }
+SESSION KEYGEN:
+PreMaster Secret:
+0000: EC F8 97 AD 16 3B AD 67   E6 CE 4D 17 7D AB 16 09  .....;.g..M.....
+0010: 38 4C 7E 76 86 98 33 85   0B 22 26 D9 20 90 D8 AD  8L.v..3.."&. ...
+CONNECTION KEYGEN:
+Client Nonce:
+0000: 64 B1 2C D3 71 8C F1 C0   F7 36 0D 5F CE 8D CC EB  d.,.q....6._....
+0010: 49 E2 5B C1 DF F8 C3 2C   1E 4A F9 9E 0C 8D 5C 0B  I.[....,.J....\.
+Server Nonce:
+0000: 60 2A 6A 91 A0 1F A7 24   D5 AD 67 68 60 12 F8 76  `*j....$..gh`..v
+0010: A5 D9 DE 34 9D FE E8 E1   EF 8C FC 25 21 1C 67 1D  ...4.......%!.g.
+Master Secret:
+0000: DF B2 04 FA 94 E0 CE 90   36 5D F2 F5 35 B4 41 3C  ........6]..5.A<
+0010: 69 AA C8 15 86 0C F2 C5   57 73 CB 5A 3D 32 29 8F  i.......Ws.Z=2).
+0020: 72 A1 65 36 57 86 B7 D8   0A 3B 03 B3 58 80 0A 9E  r.e6W....;..X...
+... no MAC keys used for this cipher
+Client write key:
+0000: 4C E9 50 76 50 2E C8 BB   D4 D2 2A 50 18 C6 40 DC  L.PvP.....*P..@.
+Server write key:
+0000: A3 4A 9E C9 0E B0 A7 65   6F 3A DC 23 03 72 59 AD  .J.....eo:.#.rY.
+Client write IV:
+0000: 38 BF 12 D6                                        8...
+Server write IV:
+0000: 67 09 DF F1                                        g...
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, READ: TLSv1.2 Handshake, length = 80
+check handshake state: certificate_verify[15]
+update handshake state: certificate_verify[15]
+upcoming handshake states: client change_cipher_spec[-1]
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** CertificateVerify
+Signature Algorithm SHA256withECDSA
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, READ: TLSv1.2 Change Cipher Spec, length = 1
+update handshake state: change_cipher_spec
+upcoming handshake states: client finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, READ: TLSv1.2 Handshake, length = 40
+check handshake state: finished[20]
+update handshake state: finished[20]
+upcoming handshake states: server change_cipher_spec[-1]
+upcoming handshake states: server finished[20]
+*** Finished
+verify_data:  { 12, 197, 198, 229, 20, 79, 226, 138, 21, 163, 202, 245 }
+***
+update handshake state: change_cipher_spec
+upcoming handshake states: server finished[20]
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, WRITE: TLSv1.2 Change Cipher Spec, length = 1
+*** Finished
+verify_data:  { 169, 171, 78, 141, 214, 131, 195, 2, 113, 211, 225, 111 }
+***
+update handshake state: finished[20]
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, WRITE: TLSv1.2 Handshake, length = 40
+%% Cached server session: [Session-5, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256]
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, READ: TLSv1.2 Alert, length = 26
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, RECV TLSv1.2 ALERT:  warning, close_notify
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, closeInboundInternal()
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, closeOutboundInternal()
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, SEND TLSv1.2 ALERT:  warning, description = close_notify
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, WRITE: TLSv1.2 Alert, length = 26
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, called closeOutbound()
+data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, closeOutboundInternal()
+>>>>>>> aa842955c619125a9d068dabbf9a2eaffa8f0197
