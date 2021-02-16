@@ -21,7 +21,8 @@ k8s_resource('spire-agent', resource_deps=['spire-server'])
 # Kafka installation
 k8s_yaml(['strimzi-kafka/ns.yaml','strimzi-kafka/strimzi-admin.yaml'])
 k8s_yaml(kustomize('strimzi-kafka'))
-
+k8s_yaml(['strimzi-kafka/kafka-ephemeral-single.yaml'])
+local_resource('my-cluster', cmd='scripts/install_kafka.sh',resource_deps=['strimzi-cluster-operator','spire-agent'])
 
 load('ext://configmap', 'configmap_yaml')
 k8s_yaml('kafka-consumer-app/yaml/ns.yaml')
@@ -60,5 +61,4 @@ k8s_resource('example-app', port_forwards='8080:8000',resource_deps=['deploy','g
 
 
 local_resource('attestation', cmd='scripts/attestation.sh',resource_deps=['spire-server'])
-local_resource('integration tests', cmd='scripts/4_create_topics.sh')
 

@@ -188,8 +188,17 @@ for message in consumer:
     print (message)
 
 from kafka import KafkaProducer
-producer = KafkaProducer(bootstrap_servers='kafka-proxy.default.svc.cluster.local:9094')
-producer = KafkaProducer(bootstrap_servers='kafka-proxy.default.svc.cluster.local:9093')
-producer = KafkaProducer(bootstrap_servers='localhost:9100')
-producer.send('sample', b'Hello, World!')
+producer = KafkaProducer(bootstrap_servers='127.0.0.1:9100')
+producer.send('sample', b'Go Spire')
 producer.send('sample', key=b'message-two', value=b'This is Kafka-Python')
+
+to consume a message directly from kafka
+
+```sh
+kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.21.1-kafka-2.7.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic my-topic --from-beginning
+```
+
+To produce a message directly to kafka
+```sh
+kubectl -n kafka run kafka-producer -ti --image=quay.io/strimzi/kafka:0.21.1-kafka-2.7.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap:9092 --topic my-topic
+```

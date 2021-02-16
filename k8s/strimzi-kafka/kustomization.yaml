@@ -1,5 +1,4 @@
 resources:
 - strimzi-cluster-operator-0.19.0.yaml
-- kafka-ephemeral-single.yaml
 namespace: kafka
    
