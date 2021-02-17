@@ -32,8 +32,18 @@ static_resources:
     - filters:
       - name: envoy.filters.network.kafka_broker
         typed_config:
-          "@type": type.googleapis.com/envoy.config.filter.network.kafka_broker.v2alpha1.KafkaBroker
+          "@type": type.googleapis.com/envoy.extensions.filters.network.kafka_broker.v3.KafkaBroker
           stat_prefix: tlsprefix
+      - name: envoy.filters.network.ext_authz
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.ext_authz.v3.ExtAuthz
+          stat_prefix: ext_authz
+          failure_mode_allow: false
+          grpc_service:
+            google_grpc:
+              target_uri: 127.0.0.1:9191
+              stat_prefix: ext_authz
+            timeout: 0.5s
       - name: envoy.filters.network.tcp_proxy
         typed_config:
           "@type": type.googleapis.com/envoy.config.filter.network.tcp_proxy.v2.TcpProxy
@@ -70,6 +80,18 @@ static_resources:
                         cluster_name: spire_sds_cluster
           require_client_certificate: false
   clusters:
+  # - name: ext-authz
+  #   type: static
+  #   connect_timeout: 0.25s    
+  #   load_assignment:
+  #     cluster_name: ext-authz
+  #     endpoints:
+  #     - lb_endpoints:
+  #       - endpoint:
+  #           address:
+  #             socket_address:
+  #               address: 127.0.0.1
+  #               port_value: 9191  
   - name: spire_sds_cluster
     connect_timeout: 0.25s
     http2_protocol_options: {}

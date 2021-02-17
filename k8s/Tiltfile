@@ -27,6 +27,7 @@ k8s_yaml(kustomize('strimzi-kafka'))
 load('ext://configmap', 'configmap_yaml')
 k8s_yaml('kafka-consumer-app/yaml/ns.yaml')
 
+k8s_yaml(configmap_yaml('kafka-policy', namespace='kafka', from_file=['./envoy-kafka/policies/allow_all.rego']))
 k8s_yaml(configmap_yaml('kafka-proxy-config', namespace='kafka', from_file=['./envoy-kafka/envoy.yaml']))
 k8s_yaml([
   './envoy-kafka/deployment.yaml',
