@@ -181,7 +181,7 @@ apk add py-pip openssl
 pip install kafka-python
 apk add python3
 
-
+p
 consumer = KafkaConsumer('sample', bootstrap_servers='localhost:9100')
 consumer = KafkaConsumer('sample', bootstrap_servers='kafka-proxy.default.svc.cluster.local:9094')
 for message in consumer:
@@ -602,3 +602,66 @@ data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, WRITE: TLSv1.2 Alert,
 data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, called closeOutbound()
 data-plane-kafka-network-thread-0-ListenerName(SSL)-SSL-4, closeOutboundInternal()
 >>>>>>> aa842955c619125a9d068dabbf9a2eaffa8f0197
+
+
+{
+   "decision_id":"85bf9db8-4569-4689-b0f6-ca66b9d74b7e",
+   "input":{
+      "attributes":{
+         "destination":{
+            "address":{
+               "Address":{
+                  "SocketAddress":{
+                     "PortSpecifier":{
+                        "PortValue":19093
+                     },
+                     "address":"10.42.0.55"
+                  }
+               }
+            },
+            "principal":"spiffe://example.org/ns/kafka/sa/default"
+         },
+         "source":{
+            "address":{
+               "Address":{
+                  "SocketAddress":{
+                     "PortSpecifier":{
+                        "PortValue":34686
+                     },
+                     "address":"10.42.0.40"
+                  }
+               }
+            },
+            "principal":"spiffe://example.org/ns/kafkaconsumer/sa/default"
+         }
+      },
+      "parsed_body":null,
+      "parsed_path":[
+         ""
+      ],
+      "parsed_query":{
+         
+      },
+      "truncated_body":false,
+      "version":{
+         "encoding":"encoding/json",
+         "ext_authz":"v2"
+      }
+   },
+   "labels":{
+      "id":"65689ba6-59c3-4b0f-839c-4e41bb409b1e",
+      "version":"0.26.0-envoy-4"
+   },
+   "level":"info",
+   "metrics":{
+      "timer_rego_query_eval_ns":42265,
+      "timer_server_handler_ns":127301
+   },
+   "msg":"Decision Log",
+   "query":"data.envoy.authz.allow",
+   "requested_by":"",
+   "result":true,
+   "time":"2021-02-16T20:51:10Z",
+   "timestamp":"2021-02-16T20:51:10.005766579Z",
+   "type":"openpolicyagent.org/decision_logs"
+}
