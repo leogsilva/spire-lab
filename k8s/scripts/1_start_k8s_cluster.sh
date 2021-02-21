@@ -43,7 +43,7 @@ done
 
 k3d registry delete k3d-myregistry.localhost || true
 k3d registry create myregistry.localhost --port 5000
-k3d cluster create ${CLUSTER_NAME} --registry-use k3d-myregistry.localhost:5000 -p "8082:30080@server[0]" 
+k3d cluster create ${CLUSTER_NAME} --registry-use k3d-myregistry.localhost:5000 -p "8082:30080@server[0]" -v ${HOME}/.m2/repository:/m2-repository
 
 echo
 echo "Waiting for Kubeconfig to be ready..."

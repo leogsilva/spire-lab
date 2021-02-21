@@ -28,6 +28,9 @@ spec:
       containers:
         - name: app
           image: kafkaapp
+          volumeMounts:
+          - mountPath: /root/.m2/repository
+            name: m2
         - name: envoy
           image: envoyproxy/envoy:v1.15.3
           ports:
@@ -69,4 +72,8 @@ spec:
         - name: spire-agent-socket
           hostPath:
             path: /run/spire/sockets
+            type: Directory
+        - name: m2
+          hostPath:
+            path: /m2-repository
             type: Directory
