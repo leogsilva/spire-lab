@@ -68,21 +68,14 @@ watch_file('kafka-consumer-app/config')
 
 
 custom_build(
-  'java-kafka-api',
-  'demo/back-end/spring-kafka/build_docker.sh $EXPECTED_REF',
-  ['./demo/back-end/spring-kafka'],
+  'kafkaapp',
+  'demo/backend/spring-kafka/build_docker.sh $EXPECTED_REF',
+  ['./demo/backend/spring-kafka/kafkaapp'],
   skips_local_docker=True,disable_push=True
 )
 
 k8s_yaml('./kafka-consumer-app/go-kafka/project/deployments/kubernetes.yaml')
-k8s_resource('example-app', port_forwards='8080:8000',resource_deps=['deploy','go-kafka-compile'])
-
-
-local_resource('attestation', cmd='scripts/attestation.sh')
-local_resource('integration tests', cmd='scripts/2_run_test.sh')
-
 k8s_resource('example-app', port_forwards='8080:8000')
-
 
 local_resource('attestation', cmd='scripts/attestation.sh',resource_deps=['spire-server'])
 

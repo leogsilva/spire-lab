@@ -27,12 +27,7 @@ spec:
       #       runAsUser: 0
       containers:
         - name: app
-          image: alpine:latest
-          command:
-          - sh
-          - -c
-          - sleep 100000
-
+          image: kafkaapp
         - name: envoy
           image: envoyproxy/envoy:v1.15.3
           ports:
