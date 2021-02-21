@@ -251,4 +251,3 @@ static_resources:
                     upstream_host: "%UPSTREAM_HOST%"
                     upstream_transport_failure_reason: "%UPSTREAM_TRANSPORT_FAILURE_REASON%"
 
-
