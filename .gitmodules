@@ -1,3 +1,0 @@
-[submodule "k8s/cp-helm-charts"]
-	path = k8s/cp-helm-charts
-	url = https://github.com/confluentinc/cp-helm-charts

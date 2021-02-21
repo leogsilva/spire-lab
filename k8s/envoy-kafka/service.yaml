@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kafka-proxy
+  namespace: kafka
+spec:
+  selector:
+    app: kafka-proxy
+  ports:
+  - name: kafka
+    targetPort: 19092
+    protocol: TCP
+    port: 9094
+  - name: tls
+    targetPort: 19093
+    protocol: TCP
+    port: 9093    
+  type: ClusterIP

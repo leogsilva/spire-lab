@@ -1,4 +1,3 @@
-print('Hello Tiltfile')
 
 allow_k8s_contexts('k3d-k3s-default')
 default_registry('k3d-myregistry.localhost:5000')
@@ -17,54 +16,56 @@ k8s_yaml([
     'spire-agent/agent-configmap.yaml',
     'spire-agent/agent-daemonset.yaml'
 ])
+k8s_resource('spire-agent', resource_deps=['spire-server'])
 
-# custom_build(
-#   'java-kafka-ssl-factory',
-#   'scripts/build_docker.sh $EXPECTED_REF',
-#   ['./java-kafka-ssl-factory'],
-#   skips_local_docker=True,disable_push=True
-# )
-# k8s_yaml(['app/client-deployment.yaml'])
 
-# Kafka installation
-custom_build(
-  'custom-cp-enterprise-kafka',
-  'custom-cp-enterprise-kafka/build_docker.sh $EXPECTED_REF',
-  ['./custom-cp-enterprise-kafka'],
-  skips_local_docker=True,disable_push=True
-)
+# Strimzi Kafka installation
+k8s_yaml(['strimzi-kafka/strimzi-admin.yaml','strimzi-kafka/kafka-ephemeral-single.yaml'])
+k8s_yaml(kustomize('strimzi-kafka'))
 
-templated_yaml = local('./scripts/kustomize_kafka.sh')
-k8s_yaml(templated_yaml)
-watch_file('cp-helm-charts-k3d')
 
 load('ext://configmap', 'configmap_yaml')
 k8s_yaml('kafka-consumer-app/yaml/ns.yaml')
+
+k8s_yaml(configmap_yaml('kafka-policy', namespace='kafka', from_file=['./envoy-kafka/policies/allow_all.rego']))
+k8s_yaml(configmap_yaml('kafka-proxy-config', namespace='kafka', from_file=['./envoy-kafka/envoy.yaml']))
+k8s_yaml([
+  './envoy-kafka/deployment.yaml',
+  './envoy-kafka/service.yaml'])
 
 k8s_yaml(configmap_yaml('app-policy', namespace='kafkaconsumer', from_file=['./kafka-consumer-app/policies/allow_all.rego']))
 k8s_yaml(configmap_yaml('proxy-config', namespace='kafkaconsumer', from_file=['./kafka-consumer-app/config/envoy.yaml']))
 k8s_yaml(['kafka-consumer-app/yaml/deployment.yaml','kafka-consumer-app/yaml/service.yaml'])
 watch_file('kafka-consumer-app/config')
 
-local_resource(
-    'deploy',
-    'python ./kafka-consumer-app/go-kafka/project/record-start-time.py',
-)
+# local_resource(
+#     'deploy',
+#     'python ./kafka-consumer-app/go-kafka/project/record-start-time.py',
+# )
 
-compile_cmd = 'pushd ./kafka-consumer-app/go-kafka/project/ && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/tilt-example-go . && popd'
+# compile_cmd = 'pushd ./kafka-consumer-app/go-kafka/project/ && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/tilt-example-go . && popd'
 
-local_resource(
-  'go-kafka-compile',
-  compile_cmd,
-  deps=['./kafka-consumer-app/go-kafka/project/main.go', './kafka-consumer-app/go-kafka/project/start.go'],
-  resource_deps = ['deploy'])
+# local_resource(
+#   'go-kafka-compile',
+#   compile_cmd,
+#   deps=['./kafka-consumer-app/go-kafka/project/main.go', './kafka-consumer-app/go-kafka/project/start.go'],
+#   resource_deps = ['deploy'])
 
-custom_build(
-  'go-kafka',
-  'kafka-consumer-app/go-kafka/build_docker.sh $EXPECTED_REF',
-  ['./kafka-consumer-app/go-kafka'],
-  skips_local_docker=True,disable_push=True
-)
+# custom_build(
+#   'go-kafka',
+#   'kafka-consumer-app/go-kafka/build_docker.sh $EXPECTED_REF',
+#   ['./kafka-consumer-app/go-kafka'],
+#   skips_local_docker=True,disable_push=True
+# )
+
+# custom_build(
+#   'bare-kafka',
+#   'bare-kafka/build_docker.sh $EXPECTED_REF',
+#   ['./bare-kafka/docker'],
+#   skips_local_docker=True,disable_push=True
+# )
+# k8s_yaml(['bare-kafka/kubernetes/ns.yaml','bare-kafka/kubernetes/kafka.yaml'])
+
 
 custom_build(
   'java-kafka-api',
@@ -79,3 +80,9 @@ k8s_resource('example-app', port_forwards='8080:8000',resource_deps=['deploy','g
 
 local_resource('attestation', cmd='scripts/attestation.sh')
 local_resource('integration tests', cmd='scripts/2_run_test.sh')
+
+k8s_resource('example-app', port_forwards='8080:8000')
+
+
+local_resource('attestation', cmd='scripts/attestation.sh',resource_deps=['spire-server'])
+
