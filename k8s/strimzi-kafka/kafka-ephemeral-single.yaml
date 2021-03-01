@@ -8,16 +8,35 @@ spec:
     version: 2.4.0
     replicas: 1
     listeners:
+      external:
+        port: 9100
+        type: nodeport
+        overrides:
+          bootstrap:
+            address: 127.0.0.1
       plain:
         port: 9092
         tls: false
         name: plain
         type: external
+        authentication:
+          type: oauth
+          clientId: kafka-broker
+          clientSecret:
+            key: secret
+            secretName: broker-oauth-secret
+          validIssuerUri: https://keycloak.keycloak:8443/auth/realms/master
+          jwksEndpointUri: https://keycloak.keycloak:8443/auth/realms/master/protocol/openid-connect/certs
+          userNameClaim: preferred_username
+          tlsTrustedCertificates:
+          - secretName: ca-truststore
+            certificate: ca.crt        
       tls: {}
     config:
       offsets.topic.replication.factor: 1
       transaction.state.log.replication.factor: 1
       transaction.state.log.min.isr: 1
+      log.message.format.version: "2.4"
     storage:
       type: ephemeral
   zookeeper:

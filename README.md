@@ -166,6 +166,7 @@ openssl s_client -showcerts -connect localhost:19093
 
 openssl s_client -showcerts -connect localhost:9100
 
+kafkacat -L -b 127.0.0.1:9092
 
 kafka-topics --list --bootstrap-server kafka-cp-kafka-headless:9092
 

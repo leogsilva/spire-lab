@@ -1,5 +1,6 @@
 resources:
 - ns.yaml
 - strimzi-cluster-operator-0.19.0.yaml
+- kafka-client.yaml
 namespace: kafka
    

@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-client-shell
+  namespace: kafka
+spec:
+  initContainers:
+  - name: gen-keystore
+    image: strimzi/kafka:0.19.0-kafka-2.4.0
+    command: 
+    - /bin/bash
+    - -c
+    - |
+      export PASSWORD=truststorepassword
+      keytool -keystore /opt/kafka/keystore/kafka-client-truststore.p12 -storetype PKCS12 -alias ca \
+        -storepass $PASSWORD -keypass $PASSWORD -import -file /opt/kafka/ca-truststore/ca.crt -noprompt;
+      keytool -keystore /opt/kafka/keystore/kafka-client-truststore.p12 -storetype PKCS12 -alias kafka \
+        -storepass $PASSWORD -keypass $PASSWORD -import -file /opt/kafka/certificates/ca.crt -noprompt;
+    volumeMounts:
+    - name: keystore
+      mountPath: "/opt/kafka/keystore"
+      readOnly: false  
+    - name: my-cluster-cluster-ca-cert
+      mountPath: "/opt/kafka/certificates"
+      readOnly: true      
+    - name: ca-truststore
+      mountPath: "/opt/kafka/ca-truststore"
+      readOnly: true
+  containers:
+  - name: kafka-client-shell
+    image: strimzi/kafka:0.19.0-kafka-2.4.0
+    command: ["/bin/bash"]
+    args: [ "-c", 'for((i=0;;i+=1)); do echo "Up time: \$i min" && sleep 60; done' ]
+    env:
+    - name: CLASSPATH
+      value: /opt/kafka/libs/kafka-oauth-client-*:/opt/kafka/libs/kafka-oauth-common-*
+    - name: OAUTH_TOKEN_ENDPOINT_URI
+      value: https://keycloak.keycloak:8443/auth/realms/master/protocol/openid-connect/token
+    volumeMounts:
+    - name: keystore
+      mountPath: "/opt/kafka/keystore"
+      readOnly: false
+  volumes:
+  - name: my-cluster-cluster-ca-cert
+    secret:
+      secretName: my-cluster-cluster-ca-cert
+  - name: ca-truststore
+    secret: 
+      secretName: ca-truststore
+  - name: keystore
+    emptyDir: {}

@@ -2,4 +2,5 @@ docker/broker/secrets/*.*
 **/.DS_Store
 .terragrunt-cache
 kubeconfig
+k8s/tmpdir/*
 k8s/custom-cp-enterprise-kafka/java-kafka-ssl-factory/.idea/

@@ -28,6 +28,9 @@ spec:
       containers:
         - name: app
           image: kafkaapp
+          env:
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: 127.0.0.1:9100
           volumeMounts:
           - mountPath: /root/.m2/repository
             name: m2

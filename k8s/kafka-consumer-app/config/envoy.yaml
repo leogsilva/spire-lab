@@ -143,7 +143,7 @@ static_resources:
       - address:
           socket_address:
             address: 127.0.0.1
-            port_value: 9100
+            port_value: 9092
         name: egress_kafka_test-cluster_bootstrap
         drain_type: modify_only
         filter_chains:

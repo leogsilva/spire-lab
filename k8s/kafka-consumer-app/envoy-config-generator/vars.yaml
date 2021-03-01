@@ -3,7 +3,7 @@ trustDomain: example.org
 spiffeId: spiffe://example.org/ns/kafkaconsumer/sa/default
 kafkaClusters:
   test-cluster:
-    bootstrapPort: 9100
+    bootstrapPort: 9092
     spiffeId: spiffe://example.org/ns/kafka/sa/default
     brokers:
       kafka0:
