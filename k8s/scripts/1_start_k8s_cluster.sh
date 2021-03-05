@@ -89,6 +89,3 @@ if [ -z "$DONE" ]; then
   echo "Timed out waiting for node(s) to be up"
   exit 1
 fi
-
-echo "Set kubecontext with:"
-echo "\texport KUBECONFIG=\"\$(k3d get-kubeconfig --name=${CLUSTER_NAME})\""

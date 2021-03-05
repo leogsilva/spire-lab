@@ -18,18 +18,10 @@ k8s_yaml([
 ])
 k8s_resource('spire-agent', resource_deps=['spire-server'])
 
-
-#keycloak setup
-k8s_yaml('keycloak/keycloak-namespace.yaml')
-local_resource('keycloak_secret', cmd='scripts/3_gen_keycloak_secret.sh')
-k8s_yaml(['keycloak/keycloak.yaml'])
-
 # Strimzi Kafka installation
-local_resource('ca-truststore', cmd='scripts/4_gen_strimzi_ca_secret.sh')
-local_resource('broker-oauth-secret',cmd='scripts/5_create_keycloak_clients.sh')
 k8s_yaml(['strimzi-kafka/strimzi-admin.yaml','strimzi-kafka/kafka-ephemeral-single.yaml'])
 k8s_yaml(kustomize('strimzi-kafka'))
-k8s_resource('strimzi-cluster-operator', resource_deps=['ca-truststore','broker-oauth-secret'])
+k8s_resource('strimzi-cluster-operator')
 k8s_resource('kafka-client-shell', resource_deps=['strimzi-cluster-operator'])
 
 
@@ -48,34 +40,6 @@ k8s_yaml(['kafka-consumer-app/yaml/deployment.yaml','kafka-consumer-app/yaml/ser
 watch_file('kafka-consumer-app/config')
 
 
-# local_resource(
-#     'deploy',
-#     'python ./kafka-consumer-app/go-kafka/project/record-start-time.py',
-# )
-
-# compile_cmd = 'pushd ./kafka-consumer-app/go-kafka/project/ && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/tilt-example-go . && popd'
-
-# local_resource(
-#   'go-kafka-compile',
-#   compile_cmd,
-#   deps=['./kafka-consumer-app/go-kafka/project/main.go', './kafka-consumer-app/go-kafka/project/start.go'],
-#   resource_deps = ['deploy'])
-
-# custom_build(
-#   'go-kafka',
-#   'kafka-consumer-app/go-kafka/build_docker.sh $EXPECTED_REF',
-#   ['./kafka-consumer-app/go-kafka'],
-#   skips_local_docker=True,disable_push=True
-# )
-
-# custom_build(
-#   'bare-kafka',
-#   'bare-kafka/build_docker.sh $EXPECTED_REF',
-#   ['./bare-kafka/docker'],
-#   skips_local_docker=True,disable_push=True
-# )
-# k8s_yaml(['bare-kafka/kubernetes/ns.yaml','bare-kafka/kubernetes/kafka.yaml'])
-
 
 custom_build(
   'kafkaapp',
@@ -84,7 +48,6 @@ custom_build(
   skips_local_docker=True,disable_push=True
 )
 
-k8s_yaml('./kafka-consumer-app/go-kafka/project/deployments/kubernetes.yaml')
 k8s_resource('example-app', port_forwards='8080:8000')
 
 local_resource('attestation', cmd='scripts/attestation.sh',resource_deps=['spire-server'])
