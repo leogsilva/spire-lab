@@ -6,4 +6,5 @@ module.exports = (app) => {
    app.delete('/message/:id', KafkaMessageController.delete);
    app.get('/messages', KafkaMessageController.get);
    app.get('/message/:id', KafkaMessageController.getById);
+
 }
